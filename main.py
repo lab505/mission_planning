@@ -1,7 +1,7 @@
 import json, logging
 
 '''
-第四课题任务规划软件的交互模块
+第三课题任务规划软件的交互模块
 可以用jythonc在java中调用 https://wiki.python.org/jython/LearningJython
 '''
 class Mission_Planning(object):
