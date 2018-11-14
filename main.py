@@ -16,7 +16,7 @@ class Mission_Planning(object):
     mission_level: in ['science_experiment', 'normal_mission', 'urgent_mission']
     mission_area: 任务地理区域, [(x1,y1),(x2,y2)...] 一个由list表示的多边形
     weather_condition: in ['rainy', 'sunny', ......]
-    wind: in [1,2,3,4]
+    wind: in [0,1,2,3,4...]#数字代表风力级别
     sensor: in ['optical', 'nir', ...]
     platform: in ['multi-rotors', 'fixed-wing', ...]
     flying_height: [min_height, max_height]
