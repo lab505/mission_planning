@@ -14,7 +14,7 @@ ui_display = mp.get_main_ui_display() 获取主界面显示内容
 mission_ = mp.get_mission_planning_res()
 ```
 
-## 3.添加实时飞行数据,刷新显示结果结果
+## 3.添加实时飞行数据,刷新显示结果
 ```
 mp.add_data(实时数据)
 ui_display = mp.get_main_ui_display() 获取主界面显示内容
