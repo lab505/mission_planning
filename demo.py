@@ -43,6 +43,10 @@ MP1.add_data=(Dict2)#数据补充
 #返回的dict有'title'(主程序标题)和'mission_type'(界面上的任务类型)
 ui_display = MP1.get_main_ui_display() #获取主界面显示内容
 
+## 获取规划结果
+mission_ = MP1.get_mission_planning_res()
+
+#添加实时飞行数据,刷新显示结果
 Dict3=[data5, data6,...]
-MP1.add_data(Dict3)
+MP1.add_data(Dict3)#实时飞行数据
 ui_display = MP1.get_main_ui_display() 获取主界面显示内容
