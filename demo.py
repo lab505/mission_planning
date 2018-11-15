@@ -4,13 +4,13 @@ import main
 '''
 第三课题任务规划软件的交互模块demo
 '''
-list1= [data1, data2,...]
+Dict1= [data1, data2,...]
 #每个data为一个dict
 #e.g.:data1={type: 资源类型（对应resources_data的具体资源,
 #resources_data: 具体资源(快视图,全国站点图,全国站点坐标信息，参与观测无人机实时GPS坐标数据)}
 #data2={type:资源类型,resources_data: 具体资源}
 MP1=new Mission_Planning
-MP1.add_data=(list1)#数据加载
+MP1.add_data=(Dict1)#数据加载
 
 '''
     由应用方/操作人员调用
@@ -36,11 +36,11 @@ MP1.create_mission(‘禹城区大尺度植被长势监测任务',large_scale,sc
 'sunny',1,'optical'，'fixed-wing'，·[75,75]，[69,69]#固定翼无人机飞行高度为15-91m;飞行速度是69公里每小时
 [0.05,0.06],'2019-11-13-14-00'，'2019-11-13-14-00')
 #坐标基于全国野外台站点经纬度坐标数据，x*和y*都是经纬度坐标
-list2= [data3, data4,...]
-MP1.add_data=(list2)#数据补充
+Dict2= [data3, data4,...]
+MP1.add_data=(Dict2)#数据补充
 #返回的dict有'title'(主程序标题)和'mission_type'(界面上的任务类型)
 ui_display = MP1.get_main_ui_display() #获取主界面显示内容
 
-list3=[data5, data6,...]
-MP1.add_data(list3)
-ui_display = mp.get_main_ui_display() 获取主界面显示内容
+Dict3=[data5, data6,...]
+MP1.add_data(Dict3)
+ui_display = MP1.get_main_ui_display() 获取主界面显示内容
