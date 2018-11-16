@@ -1,3 +1,4 @@
+# coding:utf-8
 import json, logging
 
 '''
@@ -71,7 +72,11 @@ class Mission_Planning(object):
     # TODO 明确主界面需要显示的内容
     '''
     def get_main_ui_display(self):
-        pass
+        res = {
+            'title': 'main_window_1',
+            'mission_type': 'large_scale'
+        }
+        return json.dumps(res)
     
     '''
     获取任务规划结果 - 可以发给控制中心执行飞行的结果
@@ -89,7 +94,11 @@ class Mission_Planning(object):
     'track': [(x1,y1),(x2,y2)...], //航迹
     '''
     def get_mission_planning_res(self):
-        res = {}
+        res = {
+            'name': 'mission1',
+            'mission_type': 'large_scale',
+            'mission_area': [(116.6523885,36.9449586),(116.6523645,36.9443586),(116.6677850,36.9536846),(116.6677474,36.9536833),(116.6677848,36.9536836)]
+        }
         return json.dumps(res)
 
 
