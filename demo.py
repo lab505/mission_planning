@@ -1,15 +1,17 @@
 import json, logging
-import main
+from main import Mission_Planning
 
 '''
 第三课题任务规划软件的交互模块demo
 '''
-Dict1= {data1, data2,...}
+Dict1= {'data1', 'data2',...}
 #每个data为一个dict
 #e.g.:data1={type: 资源类型（对应resources_data的具体资源,
 #resources_data: 具体资源(快视图,全国站点图,全国站点坐标信息，参与观测无人机实时GPS坐标数据)}
 #data2={type:资源类型,resources_data: 具体资源}
-MP1=new Mission_Planning
+#MP1= New Mission_Planning
+MP1= Mission_Planning()
+
 MP1.add_data=(Dict1)#数据加载
 
 
@@ -33,15 +35,18 @@ MP1.add_data=(Dict1)#数据加载
     返回
     任务创建的结果:成功or失败
     '''
-input_dict_={name:‘禹城区大尺度植被长势监测任务',mission_type:'large_scale',mission_level:'science_experiment',mission_area:
-             [(116.6523885,36.9449586),(116.6523645,36.9443586),(116.6677850,36.9536846),(116.6677474,36.9536833),(116.6677848,36.9536836)]
-             weather_condition:'sunny',wind:1,sensor:'optical',platform:'fixed-wing',flying_height:[75,75],flying_speed:[69,69],
-             shooting_space_seconds:[0.05,0.06],begin_time:'2019-11-13-14-00',end_time:'2019-11-13-14-00'
+input_dict_={'name':'禹城区大尺度植被长势监测任务','mission_type':'large_scale','mission_level':'science_experiment','mission_area':
+             [(116.6523885,36.9449586),(116.6523645,36.9443586),(116.6677850,36.9536846),(116.6677474,36.9536833),(116.6677848,36.9536836)],
+             'weather_condition':'sunny','wind':1,'sensor':'optical','platform':'fixed-wing','flying_height':[75,75],'flying_speed':[69,69],
+             'shooting_space_seconds':[0.05,0.06],'begin_time':'2019-11-13-14-00','end_time':'2019-11-13-14-00'}
              #固定翼无人机飞行高度为15-91m;飞行速度是69公里每小时
              #坐标基于全国野外台站点经纬度坐标数据，x*和y*都是经纬度坐标 
-MP1.create_mission(input_dict_)
+output_dict_={} 
+output_dict_=MP1.create_mission(json.dumps(input_dict_))
+#print(output_dict_)  #输出结果
 
-Dict2= {data3, data4,...}
+
+Dict2= {'data3','data4',...}
 MP1.add_data=(Dict2)#数据补充
 #返回的dict有'title'(主程序标题)和'mission_type'(界面上的任务类型)
 ui_display = MP1.get_main_ui_display() #获取主界面显示内容
@@ -50,6 +55,6 @@ ui_display = MP1.get_main_ui_display() #获取主界面显示内容
 mission_ = MP1.get_mission_planning_res()
 
 #添加实时飞行数据,刷新显示结果
-Dict3={data5, data6,...}
-MP1.add_data(Dict3)#实时飞行数据
-ui_display = MP1.get_main_ui_display() 获取主界面显示内容
+Dict3={'data5', 'data6',...}
+MP1.add_data=(Dict2)#数据补充
+ui_display = MP1.get_main_ui_display() #获取主界面显示内容
