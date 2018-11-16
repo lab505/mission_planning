@@ -27,13 +27,14 @@ class Mission_Planning(object):
     返回
     任务创建的结果:成功or失败
     '''
+
     def create_mission(self, input_):
         try:
             assert isinstance(input_, str)
             input_ = json.loads(input_)
             assert 'name' in input_
 
-            return 1
+            return input_
         except Exception as e:
             logging.exception(e)
             return 0
@@ -56,7 +57,7 @@ class Mission_Planning(object):
             assert isinstance(input_, str)
             input_ = json.loads(input_)
 
-            return 1
+            return input_
         except Exception as e:
             logging.exception(e)
             return 0
@@ -90,3 +91,5 @@ class Mission_Planning(object):
     def get_mission_planning_res(self):
         res = {}
         return json.dumps(res)
+
+
