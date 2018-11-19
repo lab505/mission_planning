@@ -1,10 +1,30 @@
 # coding:utf-8
-import json, logging
+import json, logging, sys
 
-'''
-第三课题任务规划软件的交互模块
-可以用jythonc在java中调用 https://wiki.python.org/jython/LearningJython
-'''
+def run():
+    mp = Mission_Planning()
+    while True:
+        try:
+            input_ = raw_input()
+            if input_ == 'end':
+                break
+            input_ = json.loads(input_)
+            assert type(input_) is dict
+            assert 'func' in input_
+            opts = {
+                'create_mission': lambda :mp.create_mission(input_['args']),
+                'add_data': lambda :mp.add_data(input_['args']),
+                'get_main_ui_display': lambda :mp.get_main_ui_display(),
+                'get_mission_planning_res': lambda :mp.get_mission_planning_res(),
+            }
+            print opts[input_['func']]()
+        except Exception as e:
+            print e
+
+
+
+# 第三课题任务规划软件的交互模块
+# 可以用jythonc在java中调用 https://wiki.python.org/jython/LearningJython
 class Mission_Planning(object):
     def __init__(self):
         pass
@@ -101,4 +121,5 @@ class Mission_Planning(object):
         }
         return json.dumps(res)
 
-
+if __name__ == '__main__':
+    run()
