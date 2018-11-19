@@ -55,7 +55,7 @@ class Mission_Planning(object):
     '''
     def add_data(self, input_):
         try:
-            assert isinstance(input_, str)
+            input_ = str(input_)
             input_ = json.loads(input_)
 
             return input_
