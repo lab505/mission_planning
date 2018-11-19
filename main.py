@@ -6,7 +6,7 @@ def run():
     while True:
         try:
             input_ = raw_input()
-            if input_ == 'end':
+            if input_ == 'end' or input_ == 'exit':
                 break
             input_ = json.loads(input_)
             assert type(input_) is dict
