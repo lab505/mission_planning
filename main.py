@@ -8,7 +8,7 @@ import json, logging
 class Mission_Planning(object):
     def __init__(self):
         pass
-    
+
     '''
     由应用方/操作人员调用
     输入
@@ -31,7 +31,7 @@ class Mission_Planning(object):
 
     def create_mission(self, input_):
         try:
-            assert isinstance(input_, str)
+            input_ = str(input_)
             input_ = json.loads(input_)
             assert 'name' in input_
 
@@ -39,7 +39,7 @@ class Mission_Planning(object):
         except Exception as e:
             logging.exception(e)
             return 0
-    
+
     '''
     由应用方/界面调用
     作为create_mission的补充输入,可以添加资源/地图数据,实时数据等
@@ -62,7 +62,7 @@ class Mission_Planning(object):
         except Exception as e:
             logging.exception(e)
             return 0
-    
+
     '''
     由后端程序
     获取显示状态
@@ -77,7 +77,7 @@ class Mission_Planning(object):
             'mission_type': 'large_scale'
         }
         return json.dumps(res)
-    
+
     '''
     获取任务规划结果 - 可以发给控制中心执行飞行的结果
     返回值 json格式dict 内容包括:
@@ -87,7 +87,7 @@ class Mission_Planning(object):
     'platform': Platform, //要求平台:枚举类型
     'camera': Camera, //要求相机(载荷):枚举类型
     'begin_time': Unix_time, //任务开始时间, 0即立即开始
-    
+
     'flying_height': [min_height, max_height], //飞行高度
     'flying_speed': [min_speed, max_speed], //飞行速度
     'shooting_space_seconds': [min_space, max_space], //拍摄间隔
