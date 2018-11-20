@@ -2,8 +2,8 @@
 import argparse, sys
 import mission_planning
 
-parser = argparse.ArgumentParser(description='Get Oracle process statistics with proto instance.',
-                                 usage='hadoop fs -text xxx.pb.snappy | ./model_debug --model=xxxx --ps=xxxxx [options]')
+parser = argparse.ArgumentParser()
+
 subparsers = parser.add_subparsers(dest='command')
 opts = {}
 subp_ = subparsers.add_parser("create_mission")
