@@ -1,4 +1,4 @@
-name: uavproj_py36
+name: uavproj_py37
 channels:
   - anaconda
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
@@ -28,5 +28,5 @@ dependencies:
   - tk=8.6.8=ha441bb4_0
   - xz=5.2.4=h1de35cc_4
   - zlib=1.2.11=h1de35cc_3
-prefix: /Users/cjl/miniconda3/envs/uavproj_py36
+prefix: /Users/cjl/miniconda3/envs/uavproj_py37
 
