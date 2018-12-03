@@ -1,0 +1,27 @@
+//任务规划软件与应用方的通信协议
+
+//应用方发给任务规划软件的内容
+
+App_Missions_Request:
+{
+    'request_name':'request_at_20180920',//任务请求名
+    'mission_num':1,//任务数量
+    'missions':[Mission1, Mission2],//多个任务的list,每个任务
+}
+
+App_Mission:
+{
+    'name':'test_mission', //任务名
+    'mission_type': MissionType, //任务类型(洪涝 or 反恐 or 生态),枚举型
+    'field_station':{'1':[118.245,38.456],'2':[117.245,39.453]...},//野外台站点序号和坐标：字典类型
+    'map':['map1','map2','map3'...],//观测区域地理底图：图片文件
+    'mission_area':[(x1,y1),(x2,y2)...], //要求任务区域:list类型表示的多边形,代表任务区域
+    'platform': Platform, //要求平台:枚举类型
+    'camera': Camera, //要求相机(载荷):枚举类型
+    'parallel': 1, //要求并行数,同时由多少台同时进行,整型,默认1
+    'scale': [min_scale,max_scale], //要求比例尺,一个区间
+    'ground_resolution': [min_resolution,max_resolution], //要求地面分辨率,一个区间
+    'overlapping': [min_overlapping,max_overlapping], //要求重叠度,一个区间
+
+    'weather':[wind_level,temperature],//任务执行时的天气状况：list类型的风力大小（eg.1级）和温度高低(27度)
+}
