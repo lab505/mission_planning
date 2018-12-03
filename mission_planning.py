@@ -124,15 +124,29 @@ class Mission_Planning(object):
             return 0
 
     def add_data(self, input_):
+        res = {'succ': False, 'ret': None}
         try:
             input_ = str(input_)
             input_ = json.loads(input_)
 
-            return input_
+            data_type = input_['data_type']
+            data_ = input_['data']
+            if data_type == 'uav':
+                res = self.add_uav_data(data_)
+
         except Exception as e:
             logging.exception(e)
-            return 0
+        return res
 
+    def add_uav_data(self, uav_data):
+        res = {'succ': False, 'ret': None}
+        if 'uav_data' not in self.status:
+            self.status['uav_data'] = []
+        for one_uav in uav_data:
+            self.status['uav_data'].append(one_uav)
+            res['succ'] = True
+        res['ret'] = 'add uav success, has %d uavs now' % len(self.status['uav_data'])
+        return res
 
     def get_main_ui_display(self):
         res = {
