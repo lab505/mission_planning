@@ -2,3 +2,18 @@ python3 main.py create_mission -input "{\"shooting_space_seconds\": [0.05, 0.06]
 python3 main.py add_data -input  "[{\"data\": \"1234567\", \"type\": \"geo_data\"}, {\"data\": \"1234567\", \"type\": \"platform_data\"}]"
 python3 main.py get_main_ui_display
 python3 main.py get_mission_planning_res
+
+python3 main.py add_data -input  "{\"data_type\": \"uav\", \"data\": [{\"id\": \"12345\", \"type\": \"gudingyi\"}, {\"id\":\"543\" , \"type\": \"type2\"}]}"
+python3 main.py add_data -input  "{\"data_type\": \"sensor\", \"data\": [{\"id\": \"12345\", \"type\": \"kejianguang\"}, {\"id\":\"543\" , \"type\": \"rehongwai\"}]}"
+python3 main.py add_data -input  "{\"data_type\": \"station\", \"data\": [{\"id\": 12, \"zuobiao\": \"[118.245,38.456]\"}, {\"id\": 23, \"zuobiao\": \"[117.245,39.453]\"}]}"
+python3 main.py add_data -input  "{\"data_type\": \"weather\", \"data\": \"sunny\"}"
+
+
+
+'''
+import json
+uav1={'id':12345,'type':'gudingyi'}
+uav2={'id':543,'type':'type2'}
+uav_data=[uav1,uav2]
+json.dumps(uav_data)
+'''

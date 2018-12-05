@@ -1,7 +1,8 @@
 # coding:utf-8
 import json, logging
 from mysqutils import Mysql_Handler
-
+import matplotlib.pyplot as plt
+import numpy as np
 '''
 由应用方/操作人员调用
 输入
@@ -129,10 +130,26 @@ class Mission_Planning(object):
             input_ = str(input_)
             input_ = json.loads(input_)
 
-            data_type = input_['data_type']
+            data_type = input_['data_type']#添加uav数据
             data_ = input_['data']
             if data_type == 'uav':
                 res = self.add_uav_data(data_)
+
+            data_type = input_['data_type']#添加sensor数据
+            data_ = input_['data']
+            if data_type == 'sensor':
+                res = self.add_sensor_data(data_)
+
+            data_type = input_['data_type']#添加野外台站坐标数据
+            data_ = input_['data']
+            if data_type == 'station':
+                res = self.add_station_data(data_)
+
+            data_type = input_['data_type']#添加天气数据
+            data_ = input_['data']
+            if data_type == 'weather':
+                res = self.add_weather_data(data_)
+
 
         except Exception as e:
             logging.exception(e)
@@ -148,7 +165,57 @@ class Mission_Planning(object):
         res['ret'] = 'add uav success, has %d uavs now' % len(self.status['uav_data'])
         return res
 
+    def add_sensor_data(self, sensor_data):
+        res = {'succ': False, 'ret': None}
+        if 'sensor_data' not in self.status:
+            self.status['sensor_data'] = []
+        for one_sensor in sensor_data:
+            self.status['sensor_data'].append(one_sensor)
+            res['succ'] = True
+        res['ret'] = 'add sensor success, has %d sensors now' % len(self.status['sensor_data'])
+        return res
+
+    def add_station_data(self, station_data):
+        res = {'succ': False, 'ret': None}
+        if 'station_data' not in self.status:
+            self.status['station_data'] = []
+        for one_station in station_data:
+            self.status['station_data'].append(one_station)
+            res['succ'] = True
+        res['ret'] = 'add station success, has %d stations now' % len(self.status['station_data'])
+        return res
+
+    def add_weather_data(self, weather_data):
+        res = {'succ': False, 'ret': None}
+        if 'weather_data' not in self.status:
+            self.status['weather_data'] = []
+        self.status['weather_data']=weather_data
+        res['succ'] = True
+        res['ret'] = 'add weather success, the weather is %s now'% weather_data
+        return res
+
     def get_main_ui_display(self):
+        trace=[[-368.0,184.0],[368.0,184.0],[1104.0,184.0],[1840.0,184.0],[2576.0,184.0],
+        [3312.0,184.0],[4048.0,184.0],[4784.0,184.0],[5520.0,184.0],[6256.0,184.0],
+        [6992.0,184.0],[7728.0,184.0],[7728.0,1472.0],[6992.0,1472.0],[6256.0,1472.0],
+        [5520.0,1472.0],[4784.0,1472.0],[4078.0,1472.0],[3312.0,1472.0],[2576.0,1472.0],
+        [1840.0,1472.0],[1104.0,1472.0],[368.0,1472.0],[-368.0,1472.0],[-368.0,2760.0],
+        [368.0,2760.0],[1104.0,2760.0],[1840.0,2760.0],[2576.0,2760.0],[3312.0,2760.0],
+        [4048.0,2760.0],[4784.0,2760.0],[5520.0,2760.0],[6256.0,2760.0],[6992.0,2760.0],
+        [7728.0,2760.0],[7728.0,4048.0],[6992.0,4048.0],[6256.0,4048.0],[5520.0,4048.0],
+        [4784.0,4048.0],[4078.0,4048.0],[3312.0,4048.0],[2576.0,4048.0],[1840.0,4048.0],
+        [1104.0,4048.0],[368.0,4048.0],[-368.0,4048.0]
+        ]
+        trace_np=np.array(trace)
+        x=trace_np[:,0]
+        #print(x)
+        y=trace_np[:,1]
+        p1=plt.scatter(x,y,marker='x',color='g',label='1',s=30)
+        plt.title('Trace')
+        plt.legend(loc = 'upper right')
+        plt.xticks(x)
+        plt.show()
+                    
         res = {
             'title': 'main_window_1',
             'mission_type': 'large_scale'
@@ -160,6 +227,10 @@ class Mission_Planning(object):
         res = {
             'name': 'mission1',
             'mission_type': 'large_scale',
-            'mission_area': [(116.6523885,36.9449586),(116.6523645,36.9443586),(116.6677850,36.9536846),(116.6677474,36.9536833),(116.6677848,36.9536836)]
-        }
+            'mission_area': [(116.6523885,36.9449586),(116.6523645,36.9443586),(116.6677850,36.9536846),(116.6677474,36.9536833),(116.6677848,36.9536836)],
+            'trace': [(-368.0,184.0),(368.0,184.0),(1104.0,184.0),(1840.0,184.0),(2576.0,184.0),
+                    (3312.0,184.0),(4048.0,184.0),(4784.0,184.0),(5520.0,184.0),(6256.0,184.0),
+                    (6992.0,184.0),(7728.0,184.0),(7728.0,1472.0),(6992.0,1472.0),(6256.0,1472.0),
+                    (5520.0,1472.0),(4784.0,1472.0),(4078.0,1472.0),(3312.0,1472.0),(2576.0,1472.0)]
+                    }
         return json.dumps(res)
