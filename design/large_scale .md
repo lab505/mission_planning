@@ -13,7 +13,7 @@ Step2. 任务规划&航迹规划  对应后端状态 Need_data->Plan_Ready
     get_mission_planning_res()  
 Step3. 结果（航迹/快视图）在屏幕上显示  对应后端状态 Plan_Ready
     get_ui_display()  
-Step4. 将规划结果发给控制中心  对应后端状态 Plan_Ready
+Step4. 将规划结果发给总指挥中心，应用方，控制系统  对应后端状态 Plan_Ready
     get_mission_planning_res()  
 Step5. 后续实时更新快视图  对应后端状态 Run
     add_data(实时飞行数据)  
