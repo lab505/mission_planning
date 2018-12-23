@@ -4,23 +4,26 @@ from aerocraft import Aerocraft
 class FightPlanRequest():
     def __init__(self,
                  flightmode=None,
-                 target=None, 
-                 aerocraft=None,
-                 aerocraft_num=1, 
-                 sensor=None,
-                 sensor_num=1):
+                 target=None,  # 目标,可以是多边形,或者点
+                 aerocraft=None,  # 飞机类型&参数, Aerocraft类的实例
+                 aerocraft_num=1,
+                 sensors_per_aerocraft=[],  # 每台飞机搭载的传感器 TODO:参考Aerocraft类实现Sensor类
+                 surface_resolution=None,  # 地表分辨率
+                 begin_time=None,  # 任务开始时间
+                 ):
         self.flightmode = flightmode
         self.target = target
         self.aerocraft = aerocraft
         self.aerocraft_num = aerocraft_num
-        self.sensor = sensor
-        self.sensor_num = sensor_num
+        self.sensors_per_aerocraft = sensors_per_aerocraft
+        self.surface_resolution=surface_resolution
+        self.begin_time=begin_time
 
 
 def flight_plan(flightrequest):
     response = {}
-    assert type(flightrequest) is FightPlanRequest
-    assert type(flightrequest.aerocraft) is Aerocraft
+    assert isinstance(flightrequest, FightPlanRequest)
+    assert isinstance(flightrequest.aerocraft, Aerocraft)
     if flightrequest.flightmode is 'Polygon':  # 区域飞行
         response['flightmode'] = 'Polygon'
         # TODO做任务规划

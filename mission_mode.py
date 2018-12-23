@@ -48,8 +48,10 @@ if __name__ == '__main__':
                             aerocraft=Aerocraft(
                                 type_='quadrotor'),
                             aerocraft_num=1,
-                            sensor='visible light',
-                            sensor_num=1),
+                            sensors_per_aerocraft=['visible light'],
+                            surface_resolution=1,
+                            begin_time='2018-12-32 08:00:00'
+                            ),
                     ],
                 ),
             ],
