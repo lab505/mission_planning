@@ -1,0 +1,6 @@
+---
+# 可以在 https://www.json2yaml.com/convert-yaml-to-json 上检测语法并尝试转化为json
+
+- name : visible_light
+  chinese_name : 可见光相机
+  focal_length_mm : 35

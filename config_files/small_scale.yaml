@@ -1,0 +1,49 @@
+---
+# 可以在 https://www.json2yaml.com/convert-yaml-to-json 上检测语法并尝试转化为json
+
+# 以下是一个例子
+# - name : 某个子任务
+#   flight_tasks :
+#     - name : 高空区域拍摄1  # 一个飞行任务,某个子任务可能有很多歌飞行任务,一个飞行任务指用同一种飞机进行飞行
+#       flightmode : Polygon  # 任务模式,区域拍摄
+#       target : 
+#         - (120.1234,40.1234)
+#         - (120.1234,44.1234)
+#         - (125.1234,44.1234)
+#         - (125.1234,40.1234)
+#       aerocraft : quadrotor
+#       aerocraft_num : 1
+#       sensors_per_aerocraft :  # 每台飞机搭载的传感器列表,可以有多个
+#        - visible_light
+#        - nir
+#       surface_resolution_m : 0.1 # 要求的地表分辨率/m
+#       begin_time : 2020-08-01 08:00:00
+
+- name : 高空监测
+  flight_tasks :
+    - name : 高空区域拍摄1
+      flightmode : Polygon
+      target : 
+        - (120.1234,40.1234)
+          (120.1234,44.1234)
+          (125.1234,44.1234)
+          (125.1234,40.1234)
+      aerocraft : quadrotor
+      aerocraft_num : 1
+      sensors_per_aerocraft :
+       - visible_light
+      surface_resolution_m : 0.1
+      begin_time : 2020-08-01 08:00:00
+  
+
+- name : 抓捕过程凝视
+  flight_tasks :
+    - name : 抓捕过程监测
+      flightmode : Fixed_Gaze
+      target : (120.1234,40.1234)
+      aerocraft : quadrotor
+      aerocraft_num : 1
+      sensors_per_aerocraft :
+       - visible_light
+      surface_resolution_m : 0.1
+      begin_time : 2020-08-01 08:00:00
