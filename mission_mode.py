@@ -22,6 +22,7 @@ def mission_plan(missionrequest):
     assert missionrequest.missionmode in [
         'Single_Mission_Single_Point',  # 单点单任务
         'Single_Mission_Multi_Point',  # 多点单任务
+        'Multi_Mission_Single_Point',  # 单点多任务
         'Multi_Mission_Multi_Point',  # 多点多任务
         ]
     
@@ -58,3 +59,27 @@ if __name__ == '__main__':
         )
         print (mission_plan(request))
     test_small_scale()
+
+    def test_large_scale():
+        request = MissionModePlanRequest(
+            missionmode='Multi_Mission_Single_Point',
+            missions=[
+                SingleMission(
+                    name='单点多任务区域监测',
+                    flight_tasks=[
+                        flight_mode.FightPlanRequest(
+                            flightmode='Polygon',
+                            target=[(128.1234,39.1234),(119.1234,39.1234),(120.2234,39.2234),(120.1254,40.1264)],
+                            aerocraft=Aerocraft(
+                                type_='quadrotor'),
+                            aerocraft_num=1,
+                            sensors_per_aerocraft=['visible light'],
+                            surface_resolution=0.2,
+                            begin_time='2019-3-3 08:20:00'
+                            ),
+                    ],
+                ),
+            ],
+        )
+        print (mission_plan(request))
+    test_large_scale()
