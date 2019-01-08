@@ -3,9 +3,9 @@
 
 - name : quadrotor
   chinese_name : 四旋翼无人机
-  max_speed_meter_per_second : 100
-  min_speed_meter_per_second : 20
-  normal_speed_meter_per_second : 40
+  max_speed_meter_per_second : 3
+  min_speed_meter_per_second : 0
+  normal_speed_meter_per_second : 3
   max_height_meter : 1000
   min_height_meter : 0
   normal_height_meter : 20
@@ -14,11 +14,11 @@
 
 - name : light_uav
   chinese_name : 轻小型无人机
-  max_speed_meter_per_second :
-  min_speed_meter_per_second :
-  normal_speed_meter_per_second :
-  max_height_meter :
-  min_height_meter :
-  normal_height_meter :
-  max_distance_meter :
-  residual_energy_percent :
+  max_speed_meter_per_second : 8
+  min_speed_meter_per_second : 3
+  normal_speed_meter_per_second : 6
+  max_height_meter : 1000
+  min_height_meter : 100
+  normal_height_meter : 1000
+  max_distance_meter : 1000
+  residual_energy_percent : 0.9
