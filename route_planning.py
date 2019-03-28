@@ -188,7 +188,13 @@ def route_planning(shooting_area,
             photo_ground_rectangles_geo.append(coor_trans(photo_ground_rectangle, inv_trans_mat))
     #return shoot_coors_geo, photo_ground_rectangles_geo
     #print (shoot_coors)
-    return shoot_coors_geo, photo_ground_rectangles_geo
+    debug_info = {
+        'shooting_area': shooting_area,
+        'shoot_coors': shoot_coors,
+        'photo_ground_rectangles': photo_ground_rectangles,
+        'area_gdal_polygon': area_gdal_polygon,
+    }
+    return shoot_coors_geo, photo_ground_rectangles_geo, debug_info
 
 
 def clock_to_float(hour, minute, sec):
@@ -203,7 +209,7 @@ def float_to_clock(float_hour):
     return hour, minute, sec
 
 
-def _get_pku_area_for_test():
+def _get_pku_points_for_test():
     min_x_pku = clock_to_float(116, 17, 58.22)
     min_y_pku = clock_to_float(39, 59, 1.99)
     max_x_pku = clock_to_float(116, 18, 31.90)
@@ -212,9 +218,40 @@ def _get_pku_area_for_test():
     return min_x_pku, min_y_pku, max_x_pku, max_y_pku, east_gate_x, east_gate_y
 
 
+def _get_pku_area_for_test():
+    points_str = '116.2991669667795,39.99593801855181,0 116.2981599305666,39.99432479048227,0 116.2982396346779,39.99187193771684,0 116.2986316799483,39.98955010195986,0 116.2989869679613,39.98690346993811,0 116.2993415918365,39.98487013115884,0 116.3014506369334,39.98456502893167,0 116.3048729780067,39.98460101371672,0 116.3082952637886,39.98460289618692,0 116.3097550542167,39.98490898739406,0 116.3101420184187,39.98552190351396,0 116.3103273694663,39.98762327912843,0 116.3100035378802,39.98993170987488,0 116.3091165111576,39.99366244148697,0 116.3090918447541,39.99806538791157,0 116.3068805401394,39.99809843859089,0 116.3046713806594,39.9980566831553,0 116.3028156745741,39.99785113751588,0 116.3020342398605,39.99688750989205,0 116.301196064829,39.99633581837119,0 116.2991669667795,39.99593801855181,0'
+    res = []
+    for point_str in points_str.split(' '):
+        x, y, _ = point_str.split(',')
+        x, y = float(x), float(y)
+        res.append((x, y))
+    return res
+
+def plan_a_route_for_test():
+    min_x_pku, min_y_pku, max_x_pku, max_y_pku, east_gate_x, east_gate_y = _get_pku_points_for_test()
+    pku_area = [
+        (min_x_pku, min_y_pku),
+        (min_x_pku, max_y_pku),
+        (max_x_pku, max_y_pku),
+        (max_x_pku, min_y_pku), ]
+    if not POLYGON_AS_CLOCKWISE:
+        pku_area = pku_area[::-1]
+
+    shoot_coors_geo, photo_ground_rectangles_geo, debug_info = route_planning(
+        shooting_area=_get_pku_area_for_test(),
+        shooting_area_coor_egsp_code='4326',
+        fly_direction=(1, 1),
+        forward_shooting_space_meters=8,
+        side_shooting_space_meters=16,
+        forward_photo_ground_meters=10,
+        side_photo_ground_meters=20,
+    )
+    return shoot_coors_geo, photo_ground_rectangles_geo, debug_info
+
+
 class _UnitTest(unittest.TestCase):
     def test_coor_trans(self):
-        min_x_pku, min_y_pku, max_x_pku, max_y_pku, east_gate_x, east_gate_y = _get_pku_area_for_test()
+        min_x_pku, min_y_pku, max_x_pku, max_y_pku, east_gate_x, east_gate_y = _get_pku_points_for_test()
         dis_meters = get_meters_between_2points(min_x_pku, min_y_pku, max_x_pku, max_y_pku, '4326')
         self.assertTrue(1700 < dis_meters and dis_meters < 1800)
 
@@ -229,25 +266,8 @@ class _UnitTest(unittest.TestCase):
         self.assertTrue(dis_trans2 < .1)
 
     def test_route_planning(self):
-        min_x_pku, min_y_pku, max_x_pku, max_y_pku, east_gate_x, east_gate_y = _get_pku_area_for_test()
-        pku_area = [
-            (min_x_pku, min_y_pku),
-            (min_x_pku, max_y_pku),
-            (max_x_pku, max_y_pku),
-            (max_x_pku, min_y_pku), ]
-        if not POLYGON_AS_CLOCKWISE:
-            pku_area = pku_area[::-1]
-
-        shoot_coors_geo, photo_ground_rectangles_geo = route_planning(
-            shooting_area=pku_area,
-            shooting_area_coor_egsp_code='4326',
-            fly_direction=(1, 0),
-            forward_shooting_space_meters=200,
-            side_shooting_space_meters=500,
-            forward_photo_ground_meters=100,
-            side_photo_ground_meters=200,
-        )
-        print(shoot_coors_geo)
+        shoot_coors_geo, photo_ground_rectangles_geo, debug_info = plan_a_route_for_test()
+        #print(shoot_coors_geo)
 
     def test_gdal_insection(self):
         poly1 = points_to_gdal_polygon([(1., 0.), (1., 3.), (2., 3.), (2., 0.)])
