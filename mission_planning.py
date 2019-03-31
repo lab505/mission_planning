@@ -1,8 +1,8 @@
 # coding:utf-8
 import unittest
-from camera import cameras
-from aerocraft import aerocrafts
-from route_planning import route_planning
+from .camera import cameras
+from .aerocraft import aerocrafts
+from .route_planning import route_planning
 
 def mission_planning(
         area_points_list,
@@ -14,11 +14,21 @@ def mission_planning(
         sideway_overlap,
         fly_east_west_direction,
         application='unknown',):
-    
+    # 判断输入是否合法
+    try:
+        ground_resolution_m = float(ground_resolution_m)
+    except:
+        return False, '地表分辨率必须是数字'
+    try:
+        forward_overlap = float(forward_overlap)
+        sideway_overlap = float(sideway_overlap)
+        assert forward_overlap >= 0. and forward_overlap < 1.
+        assert sideway_overlap >= 0. and sideway_overlap < 1.
+    except:
+        return False, '重叠度必须是数字,且在[0,1)'
     if aerocraft not in aerocrafts:
         return False, '未知的飞机类型: %s' % str(aerocraft)
     aerocraft_attributes = aerocrafts[aerocraft]
-
     if camera not in cameras:
         return False, '未知的载荷类型: %s' % str(aerocraft)
     camera_attributes = cameras[camera]
@@ -58,6 +68,12 @@ def mission_planning(
 
     # 返回结果
     res = {
+        'name': mission_name,
+        'mission_area': area_points_list,
+        'application': application, # 所属应用(生态/洪涝/反恐)
+        'forward_overlap': forward_overlap,
+        'sideway_overlap': sideway_overlap,
+        'ground_resolution_m': ground_resolution_m,
         'shoot_coors_geo': shoot_coors_geo, # 拍摄点坐标
         'photo_ground_rectangles_geo': photo_ground_rectangles_geo, # 拍摄得到图像在地面上的投影
         'fly_height': fly_height, # 航高
