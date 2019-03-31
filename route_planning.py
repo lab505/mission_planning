@@ -112,7 +112,13 @@ def points_to_gdal_polygon(points_list):
     poly.AddGeometry(ring)
     return poly
 
-
+# TODO 用高斯坐标系
+# TODO 问题 地表不平
+# TODO 拍摄区域buffer
+# TOTHINK 凹多边形
+# TODO 航点ID
+# TODO 火星坐标 交给地理所
+# TODO 输出格式 飞控多用kml
 def route_planning(shooting_area,
                    shooting_area_coor_egsp_code,
                    fly_direction,  # 飞行方向
