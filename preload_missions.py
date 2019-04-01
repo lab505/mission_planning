@@ -1,6 +1,33 @@
 # coding=utf8
 
 missions = {
+    '中尺度_区域1_0.03m_可见光': {
+        'application': '洪涝',
+        'aerocraft': '轻小型固定翼无人机',
+        'cameras': '可见光视频相机',
+        'ground_resolution_m': 0.03,
+        'fly_east_west_direction': True,
+        'forward_overlap': 0.6,
+        'sideway_overlap': 0.3,
+    },
+    '中尺度_区域1_0.05m_可见光': {
+        'application': '洪涝',
+        'aerocraft': '轻小型固定翼无人机',
+        'cameras': '可见光视频相机',
+        'ground_resolution_m': 0.05,
+        'fly_east_west_direction': True,
+        'forward_overlap': 0.6,
+        'sideway_overlap': 0.3,
+    },
+    '中尺度_区域1_0.1m_可见光': {
+        'application': '洪涝',
+        'aerocraft': '轻小型固定翼无人机',
+        'cameras': '可见光视频相机',
+        'ground_resolution_m': 0.1,
+        'fly_east_west_direction': True,
+        'forward_overlap': 0.6,
+        'sideway_overlap': 0.3,
+    },
     '中尺度_区域1_0.3m_可见光': {
         'application': '洪涝',
         'aerocraft': '轻小型固定翼无人机',
