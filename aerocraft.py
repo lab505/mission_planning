@@ -23,7 +23,7 @@ aerocrafts = {
         'max_v_km_h': 120,
         'suggest_v_km_h': 120,
         'min_v_km_h': 80,
-        'max_height_m': 2000,
+        'max_height_m': 5000,
         'min_height_m': 100,
     },
     '长航时固定翼无人机': {
