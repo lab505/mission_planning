@@ -44,5 +44,30 @@ cameras = {
         'pixel_size_m': 25*0.001*0.001,
         'pixel_num_x': 1920,
         'pixel_num_y': 1080,
+    },
+    '高光谱相机': {
+        'name': '高光谱相机',
+        'f_m': 8*0.001,
+        'pixel_num_x': 1920,
+        'pixel_num_y': 1080,
+    },
+    '偏振相机': {
+        'name': '偏振相机',
+        'f_m': 50*0.001,
+        'pixel_num_x': 1920,
+        'pixel_num_y': 1080,
+    },
+    '多光谱相机': {
+        'name': '多光谱相机',
+        'f_m': 35*0.001,
+        'pixel_num_x': 1920,
+        'pixel_num_y': 1080,
+    },
+     '全色相机': {
+        'name': '全色相机',
+        'f_m': 30*0.001,
+        'pixel_num_x': 1920,
+        'pixel_num_y': 1080,
     }
+    
 }
