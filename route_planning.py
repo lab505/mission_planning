@@ -126,6 +126,7 @@ def route_planning(shooting_area,
                    side_shooting_space_meters,  # 旁向拍摄间隔(米)
                    forward_photo_ground_meters,  # 拍摄相片投影到地面上的大小
                    side_photo_ground_meters,
+                   fly_position_left_offset_meters=0,  # 如果Sar向右拍摄,则该值为正
                    ):
     '''
     航迹规划
@@ -153,37 +154,34 @@ def route_planning(shooting_area,
     photo_ground_rectangles_geo = []
     fly_right = True
     for line_y in lines_y:
-        #print('line_y:', line_y)
         line_min_y, line_max_y = line_y - side_shooting_space_meters/2., line_y + side_shooting_space_meters/2.
         line_rectangle = [
             (min_x, line_min_y), (min_x, line_max_y), (max_x, line_max_y), (max_x, line_min_y)]
         if not POLYGON_AS_CLOCKWISE:
             line_rectangle = line_rectangle[::-1]
         line_rectangle = points_to_gdal_polygon(line_rectangle)
-        #print(line_rectangle)
         line_polygon = line_rectangle.Intersection(area_gdal_polygon)
-        #print('inter_polygon:  ', line_polygon)
         if line_polygon.GetArea() < 0.0001:
-            #print ('ct')
             continue
         line_polygon_envelope = line_polygon.GetEnvelope()
         line_min_x, line_max_x = line_polygon_envelope[0], line_polygon_envelope[1]
         line_length = line_max_x-line_min_x
-        #print ('line_len:', line_length)
         photos = math.ceil(line_length/forward_shooting_space_meters) + 1
-        #if (photos-1) * forward_shooting_space_meters < line_length - 1.:
-        #    photos += 1
         line_center_x = (line_min_x+line_max_x)/2.
         shoots_x = [forward_shooting_space_meters * (i-(photos-1)/2.) + line_center_x for i in range(photos)]
-        #print('shoots_x:', shoots_x)
         if not fly_right:
             shoots_x = shoots_x[::-1]
         fly_right = not fly_right
+
+        fly_y = None
+        if fly_right:
+            fly_y = line_y + fly_position_left_offset_meters
+        else:
+            fly_y = line_y - fly_position_left_offset_meters
+
         for shoot_x in shoots_x:
-            #print ('a', (shoot_x, line_y))
-            shoot_coors.append((shoot_x, line_y))
-            #print(len(shoot_coors))
-            shoot_coors_geo.append(one_point_coor_trans(shoot_x, line_y, inv_trans_mat))
+            shoot_coors.append((shoot_x, fly_y))
+            shoot_coors_geo.append(one_point_coor_trans(shoot_x, fly_y, inv_trans_mat))
             photo_ground_rectangle = [
                 (shoot_x - photo_size_ground_meters_half_x, line_y - photo_size_ground_meters_half_y),
                 (shoot_x - photo_size_ground_meters_half_x, line_y + photo_size_ground_meters_half_y),
@@ -234,17 +232,15 @@ def _get_pku_area_for_test():
     return res
 
 def plan_a_route_for_test():
-    min_x_pku, min_y_pku, max_x_pku, max_y_pku, east_gate_x, east_gate_y = _get_pku_points_for_test()
-    pku_area = [
-        (min_x_pku, min_y_pku),
-        (min_x_pku, max_y_pku),
-        (max_x_pku, max_y_pku),
-        (max_x_pku, min_y_pku), ]
+    import sys
+    sys.path.append('..')
+    import geo_polygons
+    an_area = geo_polygons.Polygons.aoxiang['vertex']
     if not POLYGON_AS_CLOCKWISE:
-        pku_area = pku_area[::-1]
+        an_area = an_area[::-1]
 
     shoot_coors_geo, photo_ground_rectangles_geo, debug_info = route_planning(
-        shooting_area=_get_pku_area_for_test(),
+        shooting_area=an_area,
         shooting_area_coor_egsp_code='4326',
         fly_direction=(1, 1),
         forward_shooting_space_meters=8,
