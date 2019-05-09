@@ -126,7 +126,9 @@ def route_planning(shooting_area,
                    side_shooting_space_meters,  # 旁向拍摄间隔(米)
                    forward_photo_ground_meters,  # 拍摄相片投影到地面上的大小
                    side_photo_ground_meters,
+                   shoot_mode='shutter',  # shutter/sar
                    fly_position_left_offset_meters=0,  # 如果Sar向右拍摄,则该值为正
+                   fly_height_m=None,
                    ):
     '''
     航迹规划
@@ -138,27 +140,21 @@ def route_planning(shooting_area,
     photo_size_ground_meters_half_x = forward_photo_ground_meters/2.
     photo_size_ground_meters_half_y = side_photo_ground_meters/2.
 
-    # 确定航线数量与位置(lines_num)
+    # 确定航线数量与位置(lines_num lines_y)
     area_height = max_y-min_y
     lines_num = math.ceil(area_height/side_shooting_space_meters)+1
-    #if (lines_num-1) * side_shooting_space_meters < area_height - 1.:
-    #    lines_num += 1
     lines_y = [side_shooting_space_meters * (i-(lines_num-1)/2.) for i in range(lines_num)]
-    #print(min_x, min_y, max_x, max_y)
-    #print(lines_y)
-    #print('area:', area_gdal_polygon)
 
     shoot_coors = []
     shoot_coors_geo = []
     photo_ground_rectangles = []
     photo_ground_rectangles_geo = []
+
     fly_right = True
     for line_y in lines_y:
-        line_min_y, line_max_y = line_y - side_shooting_space_meters/2., line_y + side_shooting_space_meters/2.
+        # 获取航线条带边界,中心(line_min_x, line_max_x, line_center_x)
         line_rectangle = [
             (min_x, line_min_y), (min_x, line_max_y), (max_x, line_max_y), (max_x, line_min_y)]
-        if not POLYGON_AS_CLOCKWISE:
-            line_rectangle = line_rectangle[::-1]
         line_rectangle = points_to_gdal_polygon(line_rectangle)
         line_polygon = line_rectangle.Intersection(area_gdal_polygon)
         if line_polygon.GetArea() < 0.0001:
@@ -166,18 +162,39 @@ def route_planning(shooting_area,
         line_polygon_envelope = line_polygon.GetEnvelope()
         line_min_x, line_max_x = line_polygon_envelope[0], line_polygon_envelope[1]
         line_length = line_max_x-line_min_x
-        photos = math.ceil(line_length/forward_shooting_space_meters) + 1
         line_center_x = (line_min_x+line_max_x)/2.
-        shoots_x = [forward_shooting_space_meters * (i-(photos-1)/2.) + line_center_x for i in range(photos)]
-        if not fly_right:
-            shoots_x = shoots_x[::-1]
-        fly_right = not fly_right
 
+        #line_min_y, line_max_y = line_y - side_shooting_space_meters/2., line_y + #side_shooting_space_meters/2.
+
+        # 航线偏移(Sar)
         fly_y = None
         if fly_right:
             fly_y = line_y + fly_position_left_offset_meters
         else:
             fly_y = line_y - fly_position_left_offset_meters
+
+        line_fly_points = []
+        if shoot_mode == 'shutter':
+            side_shooting_space_meters
+        elif shoot_mode == 'sar':
+            start_point, end_point = (line_min_x, fly_y), (line_max_x, fly_y)
+            if not fly_right:
+                start_point, end_point = end_point, start_point
+            start_point_geo, end_point_geo = coor_trans([start_point, end_point], inv_trans_mat)
+            line_fly_points.append(
+                {
+                    'longitude': start_point_geo[0],
+                    'latitude': end_point_geo[0],
+                    'fly_height_m': fly_height_m,
+                }
+            )
+
+        if not POLYGON_AS_CLOCKWISE:
+            line_rectangle = line_rectangle[::-1]
+        photos = math.ceil(line_length/forward_shooting_space_meters) + 1
+        shoots_x = [forward_shooting_space_meters * (i-(photos-1)/2.) + line_center_x for i in range(photos)]
+        if not fly_right:
+            shoots_x = shoots_x[::-1]
 
         for shoot_x in shoots_x:
             shoot_coors.append((shoot_x, fly_y))
@@ -190,8 +207,8 @@ def route_planning(shooting_area,
             ]
             photo_ground_rectangles.append(photo_ground_rectangle)
             photo_ground_rectangles_geo.append(coor_trans(photo_ground_rectangle, inv_trans_mat))
-    #return shoot_coors_geo, photo_ground_rectangles_geo
-    #print (shoot_coors)
+        
+        fly_right = not fly_right
     debug_info = {
         'shooting_area': shooting_area,
         'shoot_coors': shoot_coors,

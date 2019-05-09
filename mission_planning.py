@@ -66,19 +66,36 @@ def mission_planning(
         side_photo_ground_meters=side_photo_ground_meters,
     )
 
+    shoot_mode = 'shutter'
+    route_coors = None
+    if shoot_mode == 'shutter':
+        route_coors = [{'gps': (x,y), 'control_code': 'shutter'} for x, y in shoot_coors_geo]
+    else:
+        route_coors = []
+        for i in range(len(shoot_coors_geo)):
+            x, y = shoot_coors_geo
+            if i % 2 == 0:
+                control_code = 'on'
+            else:
+                control_code = 'off'
+            route_coors.append({'gps': (x, y), 'control_code': control_code})
     # 返回结果
     res = {
+        # 重要信息
         'name': mission_name,
+        'shoot_mode': 'shutter',
+        'route_coors': route_coors, # 航点
+        'fly_height_m': fly_height, # 航高
+        'aerocraft': aerocraft_attributes, # 飞机与属性
+        'camera': camera_attributes, # 载荷与属性
+
+        # 其它信息
         'mission_area': area_points_list,
         'application': application, # 所属应用(生态/洪涝/反恐)
         'forward_overlap': forward_overlap,
         'sideway_overlap': sideway_overlap,
         'ground_resolution_m': ground_resolution_m,
-        'shoot_coors_geo': shoot_coors_geo, # 拍摄点坐标
         'photo_ground_rectangles_geo': photo_ground_rectangles_geo, # 拍摄得到图像在地面上的投影
-        'fly_height': fly_height, # 航高
-        'aerocraft': aerocraft_attributes, # 飞机与属性
-        'camera': camera_attributes, # 载荷与属性
     }
     return True, res
 
