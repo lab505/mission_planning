@@ -126,9 +126,9 @@ def route_planning(shooting_area,
                    side_shooting_space_meters,  # 旁向拍摄间隔(米)
                    forward_photo_ground_meters,  # 拍摄相片投影到地面上的大小
                    side_photo_ground_meters,
-                   shoot_mode='shutter',  # shutter/sar
+                   fly_height_m,
+                   shoot_mode='sar',  # shutter/sar
                    fly_position_left_offset_meters=0,  # 如果Sar向右拍摄,则该值为正
-                   fly_height_m=None,
                    ):
     '''
     航迹规划
@@ -137,8 +137,9 @@ def route_planning(shooting_area,
     shooting_area_transed = coor_trans(shooting_area, trans_mat)
     min_x, min_y, max_x, max_y = get_bounding_box(shooting_area_transed)
     area_gdal_polygon = points_to_gdal_polygon(shooting_area_transed)
-    photo_size_ground_meters_half_x = forward_photo_ground_meters/2.
     photo_size_ground_meters_half_y = side_photo_ground_meters/2.
+    if shoot_mode != 'sar':
+        photo_size_ground_meters_half_x = forward_photo_ground_meters/2.
 
     # 确定航线数量与位置(lines_num lines_y)
     area_height = max_y-min_y
