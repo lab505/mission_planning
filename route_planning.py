@@ -145,26 +145,29 @@ def route_planning(shooting_area,
     lines_num = math.ceil(area_height/side_shooting_space_meters)+1
     lines_y = [side_shooting_space_meters * (i-(lines_num-1)/2.) for i in range(lines_num)]
 
-    shoot_coors = []
-    shoot_coors_geo = []
+    fly_points = []
     photo_ground_rectangles = []
     photo_ground_rectangles_geo = []
 
     fly_right = True
     for line_y in lines_y:
-        # 获取航线条带边界,中心(line_min_x, line_max_x, line_center_x)
+        # 计算条带宽度
+        line_min_y, line_max_y = line_y - side_shooting_space_meters/2., line_y + side_shooting_space_meters/2.
+
+        # 计算条带多边形(line_polygon)及其外包矩形(line_polygon_envelope)
         line_rectangle = [
             (min_x, line_min_y), (min_x, line_max_y), (max_x, line_max_y), (max_x, line_min_y)]
+        if not POLYGON_AS_CLOCKWISE:
+            line_rectangle = line_rectangle[::-1]
         line_rectangle = points_to_gdal_polygon(line_rectangle)
         line_polygon = line_rectangle.Intersection(area_gdal_polygon)
         if line_polygon.GetArea() < 0.0001:
             continue
         line_polygon_envelope = line_polygon.GetEnvelope()
+
         line_min_x, line_max_x = line_polygon_envelope[0], line_polygon_envelope[1]
         line_length = line_max_x-line_min_x
         line_center_x = (line_min_x+line_max_x)/2.
-
-        #line_min_y, line_max_y = line_y - side_shooting_space_meters/2., line_y + #side_shooting_space_meters/2.
 
         # 航线偏移(Sar)
         fly_y = None
@@ -175,47 +178,77 @@ def route_planning(shooting_area,
 
         line_fly_points = []
         if shoot_mode == 'shutter':
-            side_shooting_space_meters
+            photos_num = math.ceil(line_length/forward_shooting_space_meters) + 1
+            shoots_x = [forward_shooting_space_meters * (i-(photos_num-1)/2.) + line_center_x for i in range(photos_num)]
+            if not fly_right:
+                shoots_x = shoots_x[::-1]
+
+            for i in range(photos_num):
+                infor = 'straight'
+                if photos_num == 1 and i == 0:
+                    infor = 'enter and leave'
+                elif i == 0:
+                    infor = 'enter'
+                elif i == photos_num - 1:
+                    infor = 'leave'
+                
+                shoot_x = shoots_x[i]
+
+                geo_x, geo_y = one_point_coor_trans(shoot_x, fly_y, inv_trans_mat)
+                line_fly_points.append({
+                    'longitude': geo_x,
+                    'latitude': geo_y,
+                    'fly_height_m': fly_height_m,
+                    'control_code': 'camera_shoot',
+                    'infor': infor,
+                })
+                photo_ground_rectangle = [
+                    (shoot_x - photo_size_ground_meters_half_x, line_y -    photo_size_ground_meters_half_y),
+                    (shoot_x - photo_size_ground_meters_half_x, line_y +    photo_size_ground_meters_half_y),
+                    (shoot_x + photo_size_ground_meters_half_x, line_y +    photo_size_ground_meters_half_y),
+                    (shoot_x + photo_size_ground_meters_half_x, line_y -    photo_size_ground_meters_half_y),
+                ]
+                photo_ground_rectangles.append(photo_ground_rectangle)
+                photo_ground_rectangles_geo.append(coor_trans   (photo_ground_rectangle, inv_trans_mat))
         elif shoot_mode == 'sar':
             start_point, end_point = (line_min_x, fly_y), (line_max_x, fly_y)
             if not fly_right:
                 start_point, end_point = end_point, start_point
             start_point_geo, end_point_geo = coor_trans([start_point, end_point], inv_trans_mat)
-            line_fly_points.append(
-                {
-                    'longitude': start_point_geo[0],
-                    'latitude': end_point_geo[0],
-                    'fly_height_m': fly_height_m,
-                }
-            )
+            line_fly_points.append({
+                'longitude': start_point_geo[0],
+                'latitude': start_point_geo[1],
+                'fly_height_m': fly_height_m,
+                'control_code': 'sar_on',
+                'infor': 'enter',
+            })
+            line_fly_points.append({
+                'longitude': end_point_geo[0],
+                'latitude': end_point_geo[1],
+                'fly_height_m': fly_height_m,
+                'control_code': 'sar_off',
+                'infor': 'enter',
+            })
 
-        if not POLYGON_AS_CLOCKWISE:
-            line_rectangle = line_rectangle[::-1]
-        photos = math.ceil(line_length/forward_shooting_space_meters) + 1
-        shoots_x = [forward_shooting_space_meters * (i-(photos-1)/2.) + line_center_x for i in range(photos)]
-        if not fly_right:
-            shoots_x = shoots_x[::-1]
-
-        for shoot_x in shoots_x:
-            shoot_coors.append((shoot_x, fly_y))
-            shoot_coors_geo.append(one_point_coor_trans(shoot_x, fly_y, inv_trans_mat))
             photo_ground_rectangle = [
-                (shoot_x - photo_size_ground_meters_half_x, line_y - photo_size_ground_meters_half_y),
-                (shoot_x - photo_size_ground_meters_half_x, line_y + photo_size_ground_meters_half_y),
-                (shoot_x + photo_size_ground_meters_half_x, line_y + photo_size_ground_meters_half_y),
-                (shoot_x + photo_size_ground_meters_half_x, line_y - photo_size_ground_meters_half_y),
+                (line_min_x, line_y - photo_size_ground_meters_half_y),
+                (line_min_x, line_y + photo_size_ground_meters_half_y),
+                (line_max_x, line_y + photo_size_ground_meters_half_y),
+                (line_max_x, line_y - photo_size_ground_meters_half_y),
             ]
             photo_ground_rectangles.append(photo_ground_rectangle)
-            photo_ground_rectangles_geo.append(coor_trans(photo_ground_rectangle, inv_trans_mat))
-        
+            photo_ground_rectangles_geo.append(coor_trans  (photo_ground_rectangle, inv_trans_mat))
+
+        fly_points.extend(line_fly_points)
         fly_right = not fly_right
+
     debug_info = {
         'shooting_area': shooting_area,
-        'shoot_coors': shoot_coors,
+        'fly_points': fly_points,
         'photo_ground_rectangles': photo_ground_rectangles,
         'area_gdal_polygon': area_gdal_polygon,
     }
-    return shoot_coors_geo, photo_ground_rectangles_geo, debug_info
+    return fly_points, photo_ground_rectangles_geo, debug_info
 
 
 def clock_to_float(hour, minute, sec):
@@ -223,7 +256,7 @@ def clock_to_float(hour, minute, sec):
 
 
 def float_to_clock(float_hour):
-    hour = math.foor(float_hour)
+    hour = math.floor(float_hour)
     left = (float_hour-hour)*60
     minute = math.floor(left)
     sec = (left-minute)*60
