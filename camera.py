@@ -11,83 +11,34 @@ cameras = {
         'right_look_angle_degrees': 45.,
         'range_beam_width_degrees': 6.,
     },
+
     '大视场立体测绘相机': {
         'type': 'camera',
         'name': '大视场立体测绘相机',
-        'f_m': 3.3*0.001,
-        'pixel_size_m': 0.1*0.001*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
+        'f_m': 35*0.001,
+        'pixel_size_m': 3.76*0.001*0.001,
+        'pixel_num_x': 11664,
+        'pixel_num_y': 8750,
     },
-    '可见光视频相机': {
-        'type': 'camera',
-        'name': '可见光视频相机',
-        'f_m': 6.6*0.001,
-        'pixel_size_m': 0.1*0.001*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
 
-    },
-    '红外视频相机': {
-        'type': 'camera',
-        'name': '红外视频相机',
-        'f_m': 6.6*0.001,
-        'pixel_size_m': 0.1*0.001*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
-
-    },
-    'Canon EOS 450D': {
-        'type': 'camera',
-        'name': 'Canon EOS 450D',
-        'f_m': 24*0.001,
-        'pixel_size_m': 5.2*0.001*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
-    },
-    '大视场立体测绘相机': {
-        'type': 'camera',
-        'name': '大视场立体测绘相机',
-        'f_m': 44*0.001,
-        'pixel_size_m': 1.01*0.001*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
-    },
-    '双波段视频吊舱': {
-        'type': 'camera',
-        'name': '双波段视频吊舱',
-        'f_m': 24*0.001,
-        'pixel_size_m': 25*0.001*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
-    },
     '高光谱相机': {
         'type': 'camera',
         'name': '高光谱相机',
-        'f_m': 8*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
+        'f_m': 13.2*0.001,
+        'pixel_size_m': 6.5*0.001*0.001,
+        'pixel_num_x': 2000,
+        'pixel_num_y': 2054,
     },
-    '偏振相机': {
+
+    '轻型双波段相机(可见光)': {
         'type': 'camera',
-        'name': '偏振相机',
-        'f_m': 50*0.001,
+        'name': '轻型双波段相机(可见光)',
+        'f_min_m':4.7*0.001,
+        'f_max_m':47*0.001,
+        'f_m': 6.6*0.001,
+        'pixel_size_m': 2.8*0.001*0.001,
         'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
+        'pixel_num_y': 1080,  
     },
-    '多光谱相机': {
-        'type': 'camera',
-        'name': '多光谱相机',
-        'f_m': 35*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
-    },
-     '全色相机': {
-        'type': 'camera',
-        'name': '全色相机',
-        'f_m': 30*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
-    }
-    
+     
 }
