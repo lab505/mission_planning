@@ -37,10 +37,27 @@ aerocrafts = {
     },
     '多旋翼无人机': {
         'name': '多旋翼无人机',
-        'max_v_km_h': 20,
-        'suggest_v_km_h': 20,
+        'max_v_km_h': 40,
+        'suggest_v_km_h': 10,
         'min_v_km_h': 0,
-        'max_height_m': 800,
-        'min_height_m': 10,
+        'max_height_m': 2000,
+        'min_height_m': 0,
+    }
+    '飞艇': {
+        'name': '多旋翼无人机',
+        'max_v_km_h': 80,
+        'suggest_v_km_h': 35,
+        'min_v_km_h': 0,
+        'max_height_m': 2000,
+        'min_height_m': 0,
+    }
+    '系留气球': {
+        'name': '多旋翼无人机',
+        'max_v_km_h': 0,
+        'suggest_v_km_h': 0,
+        'min_v_km_h': 0,
+        'max_height_m': 1000,
+        'min_height_m': 100,
+        #因为定点工作所以速度是0
     }
 }
