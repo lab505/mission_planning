@@ -1,33 +1,50 @@
 # coding:utf-8
-import argparse, sys
-import mission_planning
+import mission_planning, json, sys
 
-parser = argparse.ArgumentParser()
+testdata = {
+    'area_points_list': [(30, 30), (30, 30.01), (30.01, 30.01), (30.01, 30)],
+    'mission_name': 'mission1',
+    'aerocraft': '轻小型固定翼无人机',
+    'camera': '大视场立体测绘相机',
+    'ground_resolution_m': 0.05,
+    'forward_overlap': 0.4,
+    'sideway_overlap': 0.6,
+    'fly_direction': (1, 0),
+    'application': 'flood',
+}
 
-parser.add_argument("-mysql_conf_file", default="/Users/cjl/.my.cnf")
-subparsers = parser.add_subparsers(dest='command')
+def plan(input_):
+    succ, res = mission_planning.mission_planning(
+        area_points_list=input_['area_points_list'],
+        mission_name=input_['mission_name'],
+        aerocraft=input_['aerocraft'],
+        camera=input_['camera'],
+        ground_resolution_m=input_['ground_resolution_m'],
+        forward_overlap=input_['forward_overlap'],
+        sideway_overlap=input_['sideway_overlap'],
+        fly_direction=input_['fly_direction'],
+        application=input_['application'],
+    )
+    if succ:
+        print (json.dumps(res).replace(' ', ''))
+    else:
+        print ('failed')
 
-subp_ = subparsers.add_parser("create_mission")
-subp_.add_argument('-input')
-subp_ = subparsers.add_parser("add_data")
-subp_.add_argument('-input')
-subp_ = subparsers.add_parser("get_main_ui_display")
-subp_ = subparsers.add_parser("get_mission_planning_res")
-subp_ = subparsers.add_parser("get_status")
-kwargs = vars(parser.parse_args())
+def print_test_data():
+    print (json.dumps(testdata).replace(' ', ''))
 
-res = None
-if kwargs['command'] == 'create_mission':
-    res = mission_planning.create_mission(kwargs['input'], mysql_conf_file=kwargs['mysql_conf_file'])
-elif kwargs['command'] == 'add_data':
-    res = mission_planning.add_data(kwargs['input'], mysql_conf_file=kwargs['mysql_conf_file'])
-elif kwargs['command'] == 'get_main_ui_display':
-    res = mission_planning.get_main_ui_display(mysql_conf_file=kwargs['mysql_conf_file'])
-elif kwargs['command'] == 'get_mission_planning_res':
-    res = mission_planning.get_mission_planning_res(mysql_conf_file=kwargs['mysql_conf_file'])
-elif kwargs['command'] == 'get_status':
-    res = mission_planning.get_status(mysql_conf_file=kwargs['mysql_conf_file'])
-else:
-    res = 'unknown command'
+def test():
+    plan(testdata)
 
-print (str(res))
+def main(input_):
+    input_ = json.loads(input_)
+    plan(input_)
+
+if __name__ == '__main__':
+    input_ = sys.argv[1]
+    if input_ == 'test':
+        test()
+    elif input_ == 'print_test_data':
+        print_test_data()
+    else:
+        main(input_)

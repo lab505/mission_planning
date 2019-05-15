@@ -14,7 +14,7 @@ def mission_planning(
         ground_resolution_m,
         forward_overlap,
         sideway_overlap,
-        fly_east_west_direction,
+        fly_direction,
         application='unknown',):
     # 判断输入是否合法
     if aerocraft not in aerocrafts:
@@ -81,13 +81,6 @@ def mission_planning(
         forward_photo_ground_meters = camera_attributes['pixel_num_y'] *    ground_resolution_m
         forward_shooting_space_meters = forward_photo_ground_meters*    (1-forward_overlap)
         side_shooting_space_meters = side_photo_ground_meters*(1-sideway_overlap)
-
-    # 确定飞行方向
-    fly_direction = None
-    if fly_east_west_direction:
-        fly_direction = (1, 0)
-    else:
-        return False, 'TODO: 待完成根据拍摄区域自适应获得飞行方向功能'
     
     # 航迹规划
     fly_route, photo_ground_rectangles_geo, debug_info = route_planning(
@@ -139,7 +132,7 @@ class _UnitTest(unittest.TestCase):
                 ground_resolution_m=mission_attributes['ground_resolution_m'],
                 forward_overlap=mission_attributes['forward_overlap'],
                 sideway_overlap=mission_attributes['sideway_overlap'],
-                fly_east_west_direction=mission_attributes['fly_east_west_direction'],
+                fly_direction=mission_attributes['fly_direction'],
                 application=mission_attributes['application'],
             )
             if succ:
