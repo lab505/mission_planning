@@ -12,6 +12,17 @@ cameras = {
         'range_beam_width_degrees': 6.,
     },
 
+    '广域SAR': {
+        'type': 'sar',
+        'name': 'minisar',
+        'R_min_m': 3000.,
+        'R_max_m': 4000.,
+        'R_suggest_m': 4000.,
+        'ground_resolution_m': .1,
+        'right_look_angle_degrees': 45.,
+        'range_beam_width_degrees': 6.,
+    },
+
     '大视场立体测绘相机': {
         'type': 'camera',
         'name': '大视场立体测绘相机',
