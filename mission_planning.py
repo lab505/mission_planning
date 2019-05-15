@@ -15,7 +15,9 @@ def mission_planning(
         forward_overlap,
         sideway_overlap,
         fly_direction,
-        application='unknown',):
+        aerocraft_num,
+        application='unknown',
+        ):
     # 判断输入是否合法
     if aerocraft not in aerocrafts:
         return False, '未知的飞机类型: %s' % str(aerocraft)
@@ -83,7 +85,7 @@ def mission_planning(
         side_shooting_space_meters = side_photo_ground_meters*(1-sideway_overlap)
     
     # 航迹规划
-    fly_route, photo_ground_rectangles_geo, debug_info = route_planning(
+    aerocraft_fly_points, photo_ground_rectangles_geo, debug_info = route_planning(
         shooting_area=area_points_list,
         shooting_area_coor_egsp_code='4326',
         fly_direction=fly_direction,
@@ -94,26 +96,29 @@ def mission_planning(
         fly_height_m=fly_height,
         shoot_mode=shoot_mode,
         fly_position_left_offset_meters=fly_position_left_offset_meters,
+        aerocraft_num=aerocraft_num,
     )
 
     # 返回结果
-    res = {
-        # 重要信息
-        'name': mission_name,
-        'shoot_mode': 'shutter',
-        'route_coors': fly_route, # 航点
-        'fly_height_m': fly_height, # 航高
-        'aerocraft': aerocraft_attributes, # 飞机与属性
-        'camera': camera_attributes, # 载荷与属性
+    res = []
+    for fly_route in aerocraft_fly_points:  # 对于每架飞机
+        res.append({
+            # 重要信息
+            'name': mission_name,
+            'shoot_mode': 'shutter',
+            'route_coors': fly_route, # 航点
+            'fly_height_m': fly_height, # 航高
+            'aerocraft': aerocraft_attributes, # 飞机与属性
+            'camera': camera_attributes, # 载荷与属性
 
-        # 其它信息
-        'mission_area': area_points_list,
-        'application': application, # 所属应用(生态/洪涝/反恐)
-        'forward_overlap': forward_overlap,
-        'sideway_overlap': sideway_overlap,
-        'ground_resolution_m': ground_resolution_m,
-        'photo_ground_rectangles_geo': photo_ground_rectangles_geo, # 拍摄得到图像在地面上的投影
-    }
+            # 其它信息
+            'mission_area': area_points_list,
+            'application': application, # 所属应用(生态/洪涝/反恐)
+            'forward_overlap': forward_overlap,
+            'sideway_overlap': sideway_overlap,
+            'ground_resolution_m': ground_resolution_m,
+            'photo_ground_rectangles_geo': photo_ground_rectangles_geo, # 拍摄得到图像  在地面上的投影
+        })
     return True, res
 
 

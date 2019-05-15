@@ -11,6 +11,7 @@ testdata = {
     'sideway_overlap': 0.6,
     'fly_direction': (1, 0),
     'application': 'flood',
+    'aerocraft_num': 3,
 }
 
 def plan(input_):
@@ -23,6 +24,7 @@ def plan(input_):
         forward_overlap=input_['forward_overlap'],
         sideway_overlap=input_['sideway_overlap'],
         fly_direction=input_['fly_direction'],
+        aerocraft_num=input_['aerocraft_num'],
         application=input_['application'],
     )
     if succ:
