@@ -20,19 +20,19 @@ class Aerocraft():
 aerocrafts = {
     '轻小型固定翼无人机': {
         'name': '轻小型固定翼无人机',
-        'max_v_km_h': 120,
-        'suggest_v_km_h': 120,
-        'min_v_km_h': 80,
-        'max_height_m': 5000,
+        'max_v_km_h': 115.2,
+        'suggest_v_km_h': 100.8,
+        'min_v_km_h': 64.8,
+        'max_height_m': 1000,
         'min_height_m': 100,
     },
     '长航时固定翼无人机': {
         'name': '长航时固定翼无人机',
-        'max_v_km_h': 180,
-        'suggest_v_km_h': 180,
+        'max_v_km_h': 230,
+        'suggest_v_km_h': 170,
         'min_v_km_h': 150,
-        'max_height_m': 5000,
-        'min_height_m': 100,
+        'max_height_m': 7500,
+        'min_height_m': 200,
 
     },
     '多旋翼无人机': {
