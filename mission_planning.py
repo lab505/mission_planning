@@ -30,6 +30,19 @@ def mission_planning(
     except:
         return False, '地表分辨率必须是数字'
     try:
+        aerocraft_num = int(aerocraft_num)
+        assert aerocraft_num > 0
+    except:
+        return False, '飞机数量必须是正整数'
+    try:
+        fly_direction = float(fly_direction)
+        fly_direction_r = fly_direction/360.*2*math.pi
+        fly_direction_x = math.cos(fly_direction_r)
+        fly_direction_y = math.sin(fly_direction_r)
+        fly_direction = (fly_direction_x, fly_direction_y)
+    except:
+        return False, '飞行方向必须是数字'
+    try:
         sideway_overlap = float(sideway_overlap)
         assert sideway_overlap >= 0. and sideway_overlap < 1.
         if 'sar' not in camera_attributes['type']:
@@ -53,15 +66,15 @@ def mission_planning(
         if look_angle_degrees < 0:
             look_angle_degrees = -look_angle_degrees
         range_beam_width_degrees = camera_attributes['range_beam_width_degrees']
-        fly_height = R_m * math.cos(look_angle_degrees)
+        fly_height = R_m * math.cos(180/math.pi*look_angle_degrees)
         if fly_height > aerocraft_attributes['max_height_m']:
             return False, '飞行高度过高, 请调整Sar安装角'
         if fly_height < aerocraft_attributes['min_height_m']:
             return False, '飞行高度过低, 请调整Sar安装角'
 
         # 地面相片大小
-        near_range_m = R_m / math.cos(look_angle_degrees - range_beam_width_degrees/2)
-        far_range_m = R_m / math.cos(look_angle_degrees + range_beam_width_degrees/2)
+        near_range_m = fly_height / math.cos(180/math.pi*(look_angle_degrees - range_beam_width_degrees/2))
+        far_range_m = fly_height / math.cos(180/math.pi*(look_angle_degrees + range_beam_width_degrees/2))
         side_photo_ground_meters = far_range_m - near_range_m
         side_shooting_space_meters = side_photo_ground_meters*(1-sideway_overlap)
 

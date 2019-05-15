@@ -9,7 +9,7 @@ testdata = {
     'ground_resolution_m': 0.05,
     'forward_overlap': 0.4,
     'sideway_overlap': 0.6,
-    'fly_direction': (1, 0),
+    'fly_direction': 0,
     'application': 'flood',
     'aerocraft_num': 3,
 }
