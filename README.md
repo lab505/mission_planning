@@ -9,7 +9,7 @@ python main.py test
 
 # 查看测试数据
 ```
-python main.py print_test_dat
+python main.py print_test_data
 ```
 
 # 运行
