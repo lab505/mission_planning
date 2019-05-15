@@ -14,7 +14,7 @@ cameras = {
 
     '广域SAR': {
         'type': 'sar',
-        'name': 'minisar',
+        'name': '广域SAR',
         'R_min_m': 3000.,
         'R_max_m': 4000.,
         'R_suggest_m': 4000.,
