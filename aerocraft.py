@@ -25,6 +25,7 @@ aerocrafts = {
         'min_v_km_h': 64.8,
         'max_height_m': 1000,
         'min_height_m': 100,
+        'max_mileage_km': 5,
     },
     '长航时固定翼无人机': {
         'name': '长航时固定翼无人机',
@@ -33,7 +34,7 @@ aerocrafts = {
         'min_v_km_h': 150,
         'max_height_m': 7500,
         'min_height_m': 200,
-
+        'max_mileage_km': 10,
     },
     '多旋翼无人机': {
         'name': '多旋翼无人机',
@@ -42,6 +43,7 @@ aerocrafts = {
         'min_v_km_h': 0,
         'max_height_m': 2000,
         'min_height_m': 0,
+        'max_mileage_km': 5,
     },
     '飞艇': {
         'name': '多旋翼无人机',
@@ -50,6 +52,7 @@ aerocrafts = {
         'min_v_km_h': 0,
         'max_height_m': 2000,
         'min_height_m': 0,
+        'max_mileage_km': 20,
     },
     '系留气球': {
         'name': '多旋翼无人机',
@@ -58,6 +61,7 @@ aerocrafts = {
         'min_v_km_h': 0,
         'max_height_m': 1000,
         'min_height_m': 100,
+        'max_mileage_km': 0,
         #因为定点工作所以速度是0
     }
 }
