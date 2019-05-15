@@ -127,8 +127,8 @@ def route_planning(shooting_area,
                    forward_photo_ground_meters,  # 拍摄相片投影到地面上的大小
                    side_photo_ground_meters,
                    fly_height_m,
-                   shoot_mode='sar',  # shutter/sar
-                   fly_position_left_offset_meters=0,  # 如果Sar向右拍摄,则该值为正
+                   shoot_mode,  # shutter/sar
+                   fly_position_left_offset_meters,  # 如果Sar向右拍摄,则该值为正
                    ):
     '''
     航迹规划
@@ -320,7 +320,6 @@ class _UnitTest(unittest.TestCase):
 
     def test_route_planning(self):
         shoot_coors_geo, photo_ground_rectangles_geo, debug_info = plan_a_route_for_test()
-        #print(shoot_coors_geo)
 
     def test_gdal_insection(self):
         poly1 = points_to_gdal_polygon([(1., 0.), (1., 3.), (2., 3.), (2., 0.)])

@@ -45,7 +45,6 @@ def mission_planning(
     forward_photo_ground_meters = None
     fly_position_left_offset_meters = 0.
     if 'sar' in camera_attributes['type']:
-        print(camera_attributes)
         # 计算飞行高度
         R_m = camera_attributes['R_suggest_m']
         look_angle_degrees = camera_attributes['right_look_angle_degrees']
@@ -101,6 +100,7 @@ def mission_planning(
         side_photo_ground_meters=side_photo_ground_meters,
         fly_height_m=fly_height,
         shoot_mode=shoot_mode,
+        fly_position_left_offset_meters=fly_position_left_offset_meters,
     )
 
     # 返回结果
