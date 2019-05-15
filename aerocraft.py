@@ -42,7 +42,7 @@ aerocrafts = {
         'min_v_km_h': 0,
         'max_height_m': 2000,
         'min_height_m': 0,
-    }
+    },
     '飞艇': {
         'name': '多旋翼无人机',
         'max_v_km_h': 80,
@@ -50,7 +50,7 @@ aerocrafts = {
         'min_v_km_h': 0,
         'max_height_m': 2000,
         'min_height_m': 0,
-    }
+    },
     '系留气球': {
         'name': '多旋翼无人机',
         'max_v_km_h': 0,
