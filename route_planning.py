@@ -130,7 +130,7 @@ def route_planning(shooting_area,
                    shoot_mode,  # shutter/sar
                    fly_position_left_offset_meters,  # 如果Sar向右拍摄,则该值为正
                    aerocraft_num,  # 飞机数量
-                   board_area_buffer_m=2000,
+                   board_area_buffer_m=5000,
                    ):
     '''
     航迹规划
