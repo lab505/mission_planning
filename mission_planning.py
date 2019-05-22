@@ -123,6 +123,7 @@ def mission_planning(
             'fly_height_m': fly_height, # 航高
             'aerocraft': aerocraft_attributes, # 飞机与属性
             'camera': camera_attributes, # 载荷与属性
+            'board_region': debug_info['board_area_points'], # 可飞行区域
 
             # 其它信息
             'mission_area': area_points_list,

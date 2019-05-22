@@ -130,6 +130,7 @@ def route_planning(shooting_area,
                    shoot_mode,  # shutter/sar
                    fly_position_left_offset_meters,  # 如果Sar向右拍摄,则该值为正
                    aerocraft_num,  # 飞机数量
+                   board_area_buffer_m=2000,
                    ):
     '''
     航迹规划
@@ -141,6 +142,15 @@ def route_planning(shooting_area,
     photo_size_ground_meters_half_y = side_photo_ground_meters/2.
     if shoot_mode != 'sar':
         photo_size_ground_meters_half_x = forward_photo_ground_meters/2.
+    
+    # 获取buffer
+    board_area = area_gdal_polygon.Buffer(distance=board_area_buffer_m)
+    board_area_geometry = board_area.GetGeometryRef(0)
+    board_area_points = []
+    for i in range(0, board_area_geometry.GetPointCount()):
+        pt = board_area_geometry.GetPoint(i)
+        board_area_points.append((pt[0], pt[1]))
+    board_area_points_geo = coor_trans(board_area_points, inv_trans_mat)
 
     # 确定航线数量与位置(lines_num lines_y)
     area_height = max_y-min_y
@@ -164,6 +174,7 @@ def route_planning(shooting_area,
     aerocraft_fly_points = []
     for i_aerocraft in range(aerocraft_num):
         fly_points = []
+        point_idx = 1
         for i_line in aerocraft_lines_id[i_aerocraft]:
             line_y = lines_y[i_line]
             
@@ -202,7 +213,7 @@ def route_planning(shooting_area,
                 for i in range(photos_num):
                     infor = 'straight'
                     if photos_num == 1 and i == 0:
-                        infor = 'enter and leave'
+                        infor = 'enter_and_leave'
                     elif i == 0:
                         infor = 'enter'
                     elif i == photos_num - 1:
@@ -212,12 +223,14 @@ def route_planning(shooting_area,
 
                     geo_x, geo_y = one_point_coor_trans(shoot_x, fly_y,     inv_trans_mat)
                     line_fly_points.append({
+                        'number': point_idx,
                         'longitude': geo_x,
                         'latitude': geo_y,
                         'fly_height_m': fly_height_m,
                         'control_code': 'camera_shoot',
                         'infor': infor,
                     })
+                    point_idx += 1
                     photo_ground_rectangle = [
                         (shoot_x - photo_size_ground_meters_half_x, line_y -        photo_size_ground_meters_half_y),
                         (shoot_x - photo_size_ground_meters_half_x, line_y +        photo_size_ground_meters_half_y),
@@ -232,19 +245,23 @@ def route_planning(shooting_area,
                     start_point, end_point = end_point, start_point
                 start_point_geo, end_point_geo = coor_trans([start_point, end_point]    , inv_trans_mat)
                 line_fly_points.append({
+                    'number': point_idx,
                     'longitude': start_point_geo[0],
                     'latitude': start_point_geo[1],
                     'fly_height_m': fly_height_m,
                     'control_code': 'sar_on',
                     'infor': 'enter',
                 })
+                point_idx += 1
                 line_fly_points.append({
+                    'number': point_idx,
                     'longitude': end_point_geo[0],
                     'latitude': end_point_geo[1],
                     'fly_height_m': fly_height_m,
                     'control_code': 'sar_off',
                     'infor': 'enter',
                 })
+                point_idx += 1
 
                 photo_ground_rectangle = [
                     (line_min_x, line_y - photo_size_ground_meters_half_y),
@@ -260,6 +277,7 @@ def route_planning(shooting_area,
         aerocraft_fly_points.append(fly_points)
 
     debug_info = {
+        'board_area_points': board_area_points_geo,
         'shooting_area': shooting_area,
         'aerocraft_fly_points': aerocraft_fly_points,
         'photo_ground_rectangles': photo_ground_rectangles,
@@ -314,6 +332,10 @@ def plan_a_route_for_test():
         side_shooting_space_meters=16,
         forward_photo_ground_meters=10,
         side_photo_ground_meters=20,
+        fly_height_m=1000,
+        shoot_mode='shutter',
+        fly_position_left_offset_meters=0,
+        aerocraft_num=1,
     )
     return shoot_coors_geo, photo_ground_rectangles_geo, debug_info
 
