@@ -51,5 +51,22 @@ cameras = {
         'pixel_num_x': 1920,
         'pixel_num_y': 1080,  
     },
-     
+
+    '轻型双波段相机(红外)': {
+        'type': 'camera',
+        'name': '轻型双波段相机(红外)',
+        'f_m': 35*0.001,
+        'pixel_size_m': 17*0.001*0.001,
+        'pixel_num_x': 1024,
+        'pixel_num_y': 768,  
+    },
+    
+     '多光谱相机': {
+        'type': 'camera',
+        'name': '多光谱相机',
+        'f_m': 6*0.001,
+        'pixel_size_m': 3.75*0.001*0.001,
+        'pixel_num_x': 1920,
+        'pixel_num_y': 1080,
+    },
 }
