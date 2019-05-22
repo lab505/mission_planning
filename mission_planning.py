@@ -114,16 +114,18 @@ def mission_planning(
 
     # 返回结果
     res = []
-    for fly_route in aerocraft_fly_points:  # 对于每架飞机
+    for i in range(len(aerocraft_fly_points)):  # 对于每架飞机
+        fly_route = aerocraft_fly_points[i]
         res.append({
             # 重要信息
-            'name': mission_name,
+            'mission_num': i+1,
+            'mission_name': mission_name,
             'shoot_mode': 'shutter',
             'route_coors': fly_route, # 航点
             'fly_height_m': fly_height, # 航高
-            'aerocraft': aerocraft_attributes, # 飞机与属性
+            'plane': aerocraft_attributes, # 飞机与属性
             'camera': camera_attributes, # 载荷与属性
-            'board_region': debug_info['board_area_points'], # 可飞行区域
+            'board_region': debug_info['board_region'], # 可飞行区域
 
             # 其它信息
             'mission_area': area_points_list,

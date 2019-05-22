@@ -151,6 +151,13 @@ def route_planning(shooting_area,
         pt = board_area_geometry.GetPoint(i)
         board_area_points.append((pt[0], pt[1]))
     board_area_points_geo = coor_trans(board_area_points, inv_trans_mat)
+    board_area_res = []
+    for i in range(len(board_area_points_geo)):
+        board_area_res.append({
+            'number': i+1,
+            'longitude': board_area_points_geo[i][0],
+            'latitude': board_area_points_geo[i][1],
+        })
 
     # 确定航线数量与位置(lines_num lines_y)
     area_height = max_y-min_y
@@ -277,7 +284,7 @@ def route_planning(shooting_area,
         aerocraft_fly_points.append(fly_points)
 
     debug_info = {
-        'board_area_points': board_area_points_geo,
+        'board_region': board_area_res,
         'shooting_area': shooting_area,
         'aerocraft_fly_points': aerocraft_fly_points,
         'photo_ground_rectangles': photo_ground_rectangles,
