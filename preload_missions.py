@@ -4,7 +4,7 @@ missions = {
     '中尺度_区域1_0.1m_广域SAR': {
         'application': '洪涝',
         'aerocraft': '长航时固定翼无人机',
-        'aerocraft_num': 1,
+        'aerocraft_num': 0,
         'cameras': '广域SAR',
         'ground_resolution_m': 0.1,
         'fly_direction': 0,
@@ -12,7 +12,7 @@ missions = {
         'sideway_overlap': 0.3,
     },
     '中尺度_区域1_0.1m_minisar': {
-        'aerocraft_num': 1,
+        'aerocraft_num': 0,
         'application': '洪涝',
         'aerocraft': '轻小型固定翼无人机',
         'cameras': 'minisar',
@@ -22,7 +22,7 @@ missions = {
         'sideway_overlap': 0.3,
     },
     '中尺度_区域1_0.1m_大视场立体测绘相机': {
-        'aerocraft_num': 1,
+        'aerocraft_num': 0,
         'application': '洪涝',
         'aerocraft': '轻小型固定翼无人机',
         'cameras': '大视场立体测绘相机',
@@ -32,7 +32,7 @@ missions = {
         'sideway_overlap': 0.3,
     },
     '中尺度_区域1_0.1m_可见光': {
-        'aerocraft_num': 1,
+        'aerocraft_num': 0,
         'application': '洪涝',
         'aerocraft': '轻小型固定翼无人机',
         'cameras': '轻型双波段相机',

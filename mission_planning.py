@@ -31,9 +31,9 @@ def mission_planning(
         return False, '地表分辨率必须是数字'
     try:
         aerocraft_num = int(aerocraft_num)
-        assert aerocraft_num > 0
+        assert aerocraft_num > -1
     except:
-        return False, '飞机数量必须是正整数'
+        return False, '飞机数量必须是0或正整数'
     try:
         fly_direction = float(fly_direction)
         fly_direction_r = fly_direction/180.*math.pi
@@ -98,7 +98,7 @@ def mission_planning(
         side_shooting_space_meters = side_photo_ground_meters*(1-sideway_overlap)
     
     # 航迹规划
-    aerocraft_fly_points, photo_ground_rectangles_geo, debug_info = route_planning(
+    lines, photo_ground_rectangles_geo, debug_info = route_planning(
         shooting_area=area_points_list,
         shooting_area_coor_egsp_code='4326',
         fly_direction=fly_direction,
@@ -109,8 +109,28 @@ def mission_planning(
         fly_height_m=fly_height,
         shoot_mode=shoot_mode,
         fly_position_left_offset_meters=fly_position_left_offset_meters,
-        aerocraft_num=aerocraft_num,
     )
+
+    totle_length_m = 0.
+    for line in lines:
+        totle_length_m += line['length']
+    max_mileage_m = aerocraft_attributes['max_mileage_km']*1000.
+    need_aerocraft_num = math.ceil(totle_length_m/max_mileage_m)
+    ave_mileage_m = totle_length_m / need_aerocraft_num
+
+    if aerocraft_num > 0 and need_aerocraft_num < aerocraft_num:
+        return None, '需要%d架飞机, 只有%d架, 请重新调整任务'
+    i_line = 0
+    aerocraft_fly_points = []
+    for i_plane in range(need_aerocraft_num):
+        plane_length_m = 0.
+        one_aerocraft_fly_points = []
+        while plane_length_m < ave_mileage_m and i_line < len(lines):
+            one_aerocraft_fly_points.extend(lines[i_line]['points'])
+            plane_length_m += lines[i_line]['length']
+            i_line += 1
+        if len(one_aerocraft_fly_points) > 0:
+            aerocraft_fly_points.append(one_aerocraft_fly_points)
 
     # 返回结果
     res = []
@@ -155,6 +175,7 @@ class _UnitTest(unittest.TestCase):
                 sideway_overlap=mission_attributes['sideway_overlap'],
                 fly_direction=mission_attributes['fly_direction'],
                 application=mission_attributes['application'],
+                aerocraft_num=5,
             )
             if succ:
                 print (succ)
