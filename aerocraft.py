@@ -25,7 +25,7 @@ aerocrafts = {
         'min_v_km_h': 64.8,
         'max_height_m': 1000,
         'min_height_m': 100,
-        'max_mileage_km': 200,
+        'max_mileage_km': 150,
     },
     '长航时固定翼无人机': {
         'name': '长航时固定翼无人机',
@@ -41,7 +41,7 @@ aerocrafts = {
         'max_v_km_h': 40,
         'suggest_v_km_h': 10,
         'min_v_km_h': 0,
-        'max_height_m': 2000,
+        'max_height_m': 1000,
         'min_height_m': 0,
         'max_mileage_km': 5,
     },
