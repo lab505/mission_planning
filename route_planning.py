@@ -285,8 +285,8 @@ def route_planning(shooting_area,
             'length': get_meters_between_2_gps_points(
                 line_fly_points[0]['longitude'],
                 line_fly_points[0]['latitude'],
-                line_fly_points[1]['longitude'],
-                line_fly_points[1]['latitude'],),
+                line_fly_points[-1]['longitude'],
+                line_fly_points[-1]['latitude'],),
         })
         fly_right = not fly_right
 
