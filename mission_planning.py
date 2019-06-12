@@ -14,7 +14,7 @@ def mission_planning(
         ground_resolution_m,
         forward_overlap,
         sideway_overlap,
-        fly_direction,
+        fly_direction_degree,
         aerocraft_num,
         application='unknown',
         ):
@@ -35,7 +35,7 @@ def mission_planning(
     except:
         return False, '飞机数量必须是0或正整数'
     try:
-        fly_direction = float(fly_direction)
+        fly_direction = float(fly_direction_degree)
         fly_direction_r = fly_direction/180.*math.pi
         fly_direction_x = math.cos(fly_direction_r)
         fly_direction_y = math.sin(fly_direction_r)
@@ -146,6 +146,7 @@ def mission_planning(
             'plane': aerocraft_attributes, # 飞机与属性
             'camera': camera_attributes, # 载荷与属性
             'board_region': debug_info['board_region'], # 可飞行区域
+            #'fly_direction': fly_direction_degree,
 
             # 其它信息
             'mission_area': area_points_list,
