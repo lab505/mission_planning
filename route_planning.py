@@ -101,6 +101,17 @@ def one_point_coor_trans(x, y, np_trans_mat):
 def coor_trans(points_list, np_trans_mat):
     return [one_point_coor_trans(x, y, np_trans_mat) for x, y in points_list]
 
+def get_structured_board_region(board_region_area):
+    print(board_region_area)
+    print(type(board_region_area))
+    board_region = []
+    for i in range(len(board_region_area)):
+        board_region.append({
+            'number': i+1,
+            'longitude': board_region_area[i][0],
+            'latitude': board_region_area[i][1],
+        })
+    return board_region
 
 def points_to_gdal_polygon(points_list):
     ring = osgeo.ogr.Geometry(osgeo.ogr.wkbLinearRing)
@@ -151,13 +162,7 @@ def route_planning(shooting_area,
         pt = board_area_geometry.GetPoint(i)
         board_area_points.append((pt[0], pt[1]))
     board_area_points_geo = coor_trans(board_area_points, inv_trans_mat)
-    board_area_res = []
-    for i in range(len(board_area_points_geo)):
-        board_area_res.append({
-            'number': i+1,
-            'longitude': board_area_points_geo[i][0],
-            'latitude': board_area_points_geo[i][1],
-        })
+    board_area_res = get_structured_board_region(board_area_points_geo)
 
     # 确定航线数量与位置(lines_num lines_y)
     area_height = max_y-min_y

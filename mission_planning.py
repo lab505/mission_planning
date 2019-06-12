@@ -16,6 +16,7 @@ def mission_planning(
         sideway_overlap,
         fly_direction_degree,
         aerocraft_num,
+        board_region,
         application='unknown',
         ):
     # 判断输入是否合法
@@ -132,6 +133,8 @@ def mission_planning(
         if len(one_aerocraft_fly_points) > 0:
             aerocraft_fly_points.append(one_aerocraft_fly_points)
 
+    if board_region == None:
+        board_region = debug_info['board_region']
     # 返回结果
     res = []
     for i in range(len(aerocraft_fly_points)):  # 对于每架飞机
@@ -145,7 +148,7 @@ def mission_planning(
             'fly_height_m': fly_height, # 航高
             'plane': aerocraft_attributes, # 飞机与属性
             'camera': camera_attributes, # 载荷与属性
-            'board_region': debug_info['board_region'], # 可飞行区域
+            'board_region': board_region, # 可飞行区域
             #'fly_direction': fly_direction_degree,
 
             # 其它信息
