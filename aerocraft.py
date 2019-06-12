@@ -18,7 +18,16 @@ class Aerocraft():
         self.residual_energy_percent=residual_energy_percent  # 剩余能量百分比
 '''
 aerocrafts = {
-    '轻小型固定翼无人机': {
+    '猛牛-轻小型固定翼无人机(演示短航程)': {
+        'name': '轻小型固定翼无人机',
+        'max_v_km_h': 115.2,
+        'suggest_v_km_h': 100.8,
+        'min_v_km_h': 64.8,
+        'max_height_m': 1000,
+        'min_height_m': 100,
+        'max_mileage_km': 3,
+    },
+    '猛牛-轻小型固定翼无人机': {
         'name': '轻小型固定翼无人机',
         'max_v_km_h': 115.2,
         'suggest_v_km_h': 100.8,
