@@ -122,7 +122,7 @@ def mission_planning(
     if aerocraft_num > 0 and need_aerocraft_num < aerocraft_num:
         return None, '需要%d架飞机, 只有%d架, 请重新调整任务'
     i_line = 0
-    aerocraft_fly_points = []
+    aerocraft_lines = []
     for i_plane in range(need_aerocraft_num):
         plane_length_m = 0.
         one_aerocraft_fly_points = []
@@ -131,20 +131,25 @@ def mission_planning(
             plane_length_m += lines[i_line]['length']
             i_line += 1
         if len(one_aerocraft_fly_points) > 0:
-            aerocraft_fly_points.append(one_aerocraft_fly_points)
+            aerocraft_lines.append({
+                'fly_points': one_aerocraft_fly_points,
+                'length_m': plane_length_m,
+            })
 
     if board_region == None:
         board_region = debug_info['board_region']
     # 返回结果
     res = []
-    for i in range(len(aerocraft_fly_points)):  # 对于每架飞机
-        fly_route = aerocraft_fly_points[i]
+    for i in range(len(aerocraft_lines)):  # 对于每架飞机
+        fly_route = aerocraft_lines[i]['fly_points']
+        length_m = aerocraft_lines[i]['length_m']
         res.append({
             # 重要信息
             'mission_num': i+1,
             'mission_name': mission_name,
             'shoot_mode': 'shutter',
             'route_coors': fly_route, # 航点
+            'length_m': length_m, # 距离
             'fly_height_m': fly_height, # 航高
             'plane': aerocraft_attributes, # 飞机与属性
             'camera': camera_attributes, # 载荷与属性
