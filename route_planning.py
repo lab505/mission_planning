@@ -102,8 +102,6 @@ def coor_trans(points_list, np_trans_mat):
     return [one_point_coor_trans(x, y, np_trans_mat) for x, y in points_list]
 
 def get_structured_board_region(board_region_area):
-    print(board_region_area)
-    print(type(board_region_area))
     board_region = []
     for i in range(len(board_region_area)):
         board_region.append({

@@ -17,6 +17,7 @@ def mission_planning(
         fly_direction_degree,
         aerocraft_num,
         board_region,
+        board_region_max_fly_height_m,
         application='unknown',
         ):
     # 判断输入是否合法
@@ -60,6 +61,12 @@ def mission_planning(
     forward_shooting_space_meters = None
     forward_photo_ground_meters = None
     fly_position_left_offset_meters = 0.
+
+    max_fly_height_m = aerocraft_attributes['max_height_m']
+    min_fly_height_m = aerocraft_attributes['min_height_m']
+    if board_region_max_fly_height_m > max_fly_height_m:
+        max_fly_height_m = board_region_max_fly_height_m
+    # goon here
     if 'sar' in camera_attributes['type']:
         # 计算飞行高度
         R_m = camera_attributes['R_suggest_m']
