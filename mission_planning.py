@@ -116,11 +116,17 @@ def mission_planning(
     for line in lines:
         totle_length_m += line['length']
     max_mileage_m = aerocraft_attributes['max_mileage_km']*1000.
-    need_aerocraft_num = math.ceil(totle_length_m/max_mileage_m)
+
+    
+    need_aerocraft_num = None
+    if aerocraft_num == 0:
+        need_aerocraft_num = math.ceil(totle_length_m/max_mileage_m)
+    else:
+        need_aerocraft_num = aerocraft_num
     ave_mileage_m = totle_length_m / need_aerocraft_num
 
-    if aerocraft_num > 0 and need_aerocraft_num < aerocraft_num:
-        return None, '需要%d架飞机, 只有%d架, 请重新调整任务'
+    #if aerocraft_num > 0 and need_aerocraft_num < aerocraft_num:
+    #    return None, '需要%d架飞机, 只有%d架, 请重新调整任务'
     i_line = 0
     aerocraft_lines = []
     for i_plane in range(need_aerocraft_num):
