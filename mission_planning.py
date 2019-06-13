@@ -66,19 +66,29 @@ def mission_planning(
     min_fly_height_m = aerocraft_attributes['min_height_m']
     if board_region_max_fly_height_m > max_fly_height_m:
         max_fly_height_m = board_region_max_fly_height_m
-    # goon here
+
     if 'sar' in camera_attributes['type']:
         # 计算飞行高度
-        R_m = camera_attributes['R_suggest_m']
         look_angle_degrees = camera_attributes['right_look_angle_degrees']
         if look_angle_degrees < 0:
             look_angle_degrees = -look_angle_degrees
         range_beam_width_degrees = camera_attributes['range_beam_width_degrees']
-        fly_height = R_m * math.cos(math.pi/180.*look_angle_degrees)
-        if fly_height > aerocraft_attributes['max_height_m']:
-            return False, '飞行高度 %f(m) 过低, 请调整Sar安装角' % fly_height
-        if fly_height < aerocraft_attributes['min_height_m']:
-            return False, '飞行高度 %f(m) 过低, 请调整Sar安装角' % fly_height
+        camera_suggest_fly_height = camera_attributes['R_suggest_m'] * math.cos(math.pi/180.*look_angle_degrees)
+        camera_max_fly_height = camera_attributes['R_max_m'] * math.cos(math.pi/180.*look_angle_degrees)
+        camera_min_fly_height = camera_attributes['R_min_m'] * math.cos(math.pi/180.*look_angle_degrees)
+        if camera_min_fly_height > max_fly_height_m:
+            return False, 'Sar允许的最小飞行高度%f(m) 超出 飞机、空域允许的最大飞行高度%f(m)，请调整' % (camera_min_fly_height, max_fly_height_m)
+        if camera_max_fly_height < min_fly_height_m:
+            return False, 'Sar允许的最大飞行高度%f(m) 不足 飞机允许的最小飞行高度%f(m)，请调整' % (camera_max_fly_height, min_fly_height_m)
+        max_fly_height_m = min(camera_max_fly_height, max_fly_height_m)
+        min_fly_height_m = max(camera_min_fly_height, min_fly_height_m)
+
+        if camera_suggest_fly_height > max_fly_height_m and camera_suggest_fly_height >= min_fly_height_m:
+            fly_height = max_fly_height_m
+        elif camera_suggest_fly_height < min_fly_height_m:
+            fly_height = min_fly_height_m
+        else:
+            fly_height = camera_suggest_fly_height
 
         # 地面相片大小
         near_range_m = fly_height / math.cos(math.pi/180.*(look_angle_degrees - range_beam_width_degrees/2))
@@ -91,13 +101,14 @@ def mission_planning(
             fly_position_left_offset_meters = -fly_position_left_offset_meters
     else:
         # 计算飞行高度
-        min_fly_height = camera_attributes['f_m']/camera_attributes['pixel_size_m'] *ground_resolution_m
-        fly_height = min_fly_height
-        if fly_height > aerocraft_attributes['max_height_m']:
-            fly_height = aerocraft_attributes['max_height_m']
-            ground_resolution_m = camera_attributes['pixel_size_m']*fly_height/ camera_attributes['f_m']
-        if fly_height < aerocraft_attributes['min_height_m']:
-            return False, '飞行高度过低, 请调大地面分辨率'
+        camera_max_fly_height = camera_attributes['f_m']/camera_attributes['pixel_size_m'] *ground_resolution_m
+        fly_height = camera_max_fly_height
+        if camera_max_fly_height < min_fly_height_m:
+            return False, '分辨率允许的最大飞行高度%f(m) 不足 飞机的最小飞行高度%f(m)，请调整' % (camera_max_fly_height, min_fly_height_m)
+        if camera_max_fly_height < max_fly_height_m:
+            fly_height = camera_max_fly_height
+        else:
+            fly_height = max_fly_height_m
 
         # 计算地面相片大小与拍摄间隔
         side_photo_ground_meters = camera_attributes['pixel_num_x'] *   ground_resolution_m
