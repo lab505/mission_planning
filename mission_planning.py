@@ -1,10 +1,12 @@
 # coding:utf-8
 import unittest, math, sys, os, logging
+
 filepath = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(filepath)
 from camera import cameras
 from aerocraft import aerocrafts
 from route_planning import route_planning
+
 
 def mission_planning(
         area_points_list,
@@ -19,7 +21,7 @@ def mission_planning(
         board_region,
         board_region_max_fly_height_m,
         application='unknown',
-        ):
+):
     # 判断输入是否合法
     if aerocraft not in aerocrafts:
         return False, '未知的飞机类型: %s' % str(aerocraft)
@@ -38,7 +40,7 @@ def mission_planning(
         return False, '飞机数量必须是0或正整数'
     try:
         fly_direction = float(fly_direction_degree)
-        fly_direction_r = fly_direction/180.*math.pi
+        fly_direction_r = fly_direction / 180. * math.pi
         fly_direction_x = math.cos(fly_direction_r)
         fly_direction_y = math.sin(fly_direction_r)
         fly_direction = (fly_direction_x, fly_direction_y)
@@ -53,7 +55,7 @@ def mission_planning(
     except Exception as e:
         logging.exception(e)
         return False, '重叠度必须是数字,且在[0,1)'
-    
+    print('ok')
     # 确定路径规划的参数
     fly_height = None
     shoot_mode = 'sar' if 'sar' in camera_attributes['type'] else 'shutter'
@@ -73,9 +75,9 @@ def mission_planning(
         if look_angle_degrees < 0:
             look_angle_degrees = -look_angle_degrees
         range_beam_width_degrees = camera_attributes['range_beam_width_degrees']
-        camera_suggest_fly_height = camera_attributes['R_suggest_m'] * math.cos(math.pi/180.*look_angle_degrees)
-        camera_max_fly_height = camera_attributes['R_max_m'] * math.cos(math.pi/180.*look_angle_degrees)
-        camera_min_fly_height = camera_attributes['R_min_m'] * math.cos(math.pi/180.*look_angle_degrees)
+        camera_suggest_fly_height = camera_attributes['R_suggest_m'] * math.cos(math.pi / 180. * look_angle_degrees)
+        camera_max_fly_height = camera_attributes['R_max_m'] * math.cos(math.pi / 180. * look_angle_degrees)
+        camera_min_fly_height = camera_attributes['R_min_m'] * math.cos(math.pi / 180. * look_angle_degrees)
         if camera_min_fly_height > max_fly_height_m:
             return False, 'Sar允许的最小飞行高度%f(m) 超出 飞机、空域允许的最大飞行高度%f(m)，请调整' % (camera_min_fly_height, max_fly_height_m)
         if camera_max_fly_height < min_fly_height_m:
@@ -91,17 +93,17 @@ def mission_planning(
             fly_height = camera_suggest_fly_height
 
         # 地面相片大小
-        near_range_m = fly_height / math.cos(math.pi/180.*(look_angle_degrees - range_beam_width_degrees/2))
-        far_range_m = fly_height / math.cos(math.pi/180.*(look_angle_degrees + range_beam_width_degrees/2))
+        near_range_m = fly_height / math.cos(math.pi / 180. * (look_angle_degrees - range_beam_width_degrees / 2))
+        far_range_m = fly_height / math.cos(math.pi / 180. * (look_angle_degrees + range_beam_width_degrees / 2))
         side_photo_ground_meters = far_range_m - near_range_m
-        side_shooting_space_meters = side_photo_ground_meters*(1-sideway_overlap)
+        side_shooting_space_meters = side_photo_ground_meters * (1 - sideway_overlap)
 
         fly_position_left_offset_meters = (far_range_m + near_range_m) / 2.
         if camera_attributes['right_look_angle_degrees'] < 0:  # 如果Sar向左看
             fly_position_left_offset_meters = -fly_position_left_offset_meters
     else:
         # 计算飞行高度
-        camera_max_fly_height = camera_attributes['f_m']/camera_attributes['pixel_size_m'] *ground_resolution_m
+        camera_max_fly_height = camera_attributes['f_m'] / camera_attributes['pixel_size_m'] * ground_resolution_m
         fly_height = camera_max_fly_height
         if camera_max_fly_height < min_fly_height_m:
             return False, '分辨率允许的最大飞行高度%f(m) 不足 飞机的最小飞行高度%f(m)，请调整' % (camera_max_fly_height, min_fly_height_m)
@@ -111,11 +113,11 @@ def mission_planning(
             fly_height = max_fly_height_m
 
         # 计算地面相片大小与拍摄间隔
-        side_photo_ground_meters = camera_attributes['pixel_num_x'] *   ground_resolution_m
-        forward_photo_ground_meters = camera_attributes['pixel_num_y'] *    ground_resolution_m
-        forward_shooting_space_meters = forward_photo_ground_meters*    (1-forward_overlap)
-        side_shooting_space_meters = side_photo_ground_meters*(1-sideway_overlap)
-    
+        side_photo_ground_meters = camera_attributes['pixel_num_x'] * ground_resolution_m
+        forward_photo_ground_meters = camera_attributes['pixel_num_y'] * ground_resolution_m
+        forward_shooting_space_meters = forward_photo_ground_meters * (1 - forward_overlap)
+        side_shooting_space_meters = side_photo_ground_meters * (1 - sideway_overlap)
+
     # 航迹规划
     lines, photo_ground_rectangles_geo, debug_info = route_planning(
         shooting_area=area_points_list,
@@ -133,17 +135,16 @@ def mission_planning(
     totle_length_m = 0.
     for line in lines:
         totle_length_m += line['length']
-    max_mileage_m = aerocraft_attributes['max_mileage_km']*1000.
+    max_mileage_m = aerocraft_attributes['max_mileage_km'] * 1000.
 
-    
     need_aerocraft_num = None
     if aerocraft_num == 0:
-        need_aerocraft_num = math.ceil(totle_length_m/max_mileage_m)
+        need_aerocraft_num = math.ceil(totle_length_m / max_mileage_m)
     else:
         need_aerocraft_num = aerocraft_num
     ave_mileage_m = totle_length_m / need_aerocraft_num
 
-    #if aerocraft_num > 0 and need_aerocraft_num < aerocraft_num:
+    # if aerocraft_num != 0 and need_aerocraft_num > aerocraft_num:
     #    return None, '需要%d架飞机, 只有%d架, 请重新调整任务'
     i_line = 0
     aerocraft_lines = []
@@ -169,24 +170,24 @@ def mission_planning(
         length_m = aerocraft_lines[i]['length_m']
         res.append({
             # 重要信息
-            'mission_num': i+1,
+            'mission_num': i + 1,
             'mission_name': mission_name,
             'shoot_mode': 'shutter',
-            'route_coors': fly_route, # 航点
-            'length_m': length_m, # 距离
-            'fly_height_m': fly_height, # 航高
-            'plane': aerocraft_attributes, # 飞机与属性
-            'camera': camera_attributes, # 载荷与属性
-            'board_region': board_region, # 可飞行区域
-            #'fly_direction': fly_direction_degree,
+            'route_coors': fly_route,  # 航点
+            'length_m': length_m,  # 距离
+            'fly_height_m': fly_height,  # 航高
+            'plane': aerocraft_attributes,  # 飞机与属性
+            'camera': camera_attributes,  # 载荷与属性
+            'board_region': board_region,  # 可飞行区域
+            # 'fly_direction': fly_direction_degree,
 
             # 其它信息
             'mission_area': area_points_list,
-            'application': application, # 所属应用(生态/洪涝/反恐)
+            'application': application,  # 所属应用(生态/洪涝/反恐)
             'forward_overlap': forward_overlap,
             'sideway_overlap': sideway_overlap,
             'ground_resolution_m': ground_resolution_m,
-            'photo_ground_rectangles_geo': photo_ground_rectangles_geo, # 拍摄得到图像  在地面上的投影
+            'photo_ground_rectangles_geo': photo_ground_rectangles_geo,  # 拍摄得到图像  在地面上的投影
         })
     return True, res
 
@@ -211,9 +212,9 @@ class _UnitTest(unittest.TestCase):
                 aerocraft_num=5,
             )
             if succ:
-                print (succ)
+                print(succ)
             else:
-                print (res)
+                print(res)
 
 
 if __name__ == '__main__':
