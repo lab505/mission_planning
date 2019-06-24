@@ -182,6 +182,10 @@ def mission_planning(
             # 'fly_direction': fly_direction_degree,
 
             # 其它信息
+            'forward_photo_ground_meters': forward_photo_ground_meters,
+            'side_photo_ground_meters': side_photo_ground_meters,
+            'forward_shooting_space_meters': forward_shooting_space_meters,
+            'side_shooting_space_meters': side_shooting_space_meters,
             'mission_area': area_points_list,
             'application': application,  # 所属应用(生态/洪涝/反恐)
             'forward_overlap': forward_overlap,
