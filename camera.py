@@ -69,4 +69,16 @@ cameras = {
         'pixel_num_x': 1280,
         'pixel_num_y': 960,
     },
+
+     '光学相机（视频）': {
+        'type': 'camera',
+        'name': '光学相机（视频）',
+        'f_min_m':28*0.001,
+        'f_max_m':100*0.001,
+        'f_m': 64*0.001,
+        'pixel_size_m': 8*0.001*0.001,
+        'pixel_num_x': 1920,
+        'pixel_num_y': 1080,
+    },
+
 }
