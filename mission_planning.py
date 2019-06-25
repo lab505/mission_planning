@@ -5,7 +5,7 @@ filepath = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(filepath)
 from camera import cameras
 from aerocraft import aerocrafts
-from route_planning import route_planning
+from route_planning import route_planning, get_longest_edge
 
 
 def mission_planning(
@@ -39,13 +39,18 @@ def mission_planning(
     except:
         return False, '飞机数量必须是0或正整数'
     try:
-        fly_direction = float(fly_direction_degree)
-        fly_direction_r = fly_direction / 180. * math.pi
-        fly_direction_x = math.cos(fly_direction_r)
-        fly_direction_y = math.sin(fly_direction_r)
-        fly_direction = (fly_direction_x, fly_direction_y)
-    except:
-        return False, '飞行方向必须是数字'
+        if fly_direction_degree == 'longest_edge':
+            longest_edge = get_longest_edge(area_points_list)
+            fly_direction = (longest_edge[0][0] - longest_edge[1][0], longest_edge[0][1] - longest_edge[1][1])
+        else:
+            fly_direction = float(fly_direction_degree)
+            fly_direction_r = fly_direction / 180. * math.pi
+            fly_direction_x = math.cos(fly_direction_r)
+            fly_direction_y = math.sin(fly_direction_r)
+            fly_direction = (fly_direction_x, fly_direction_y)
+    except Exception as e:
+        logging.exception(e)
+        return False, '飞行方向必须是数字或longest_edge: %s' % str(fly_direction_degree)
     try:
         sideway_overlap = float(sideway_overlap)
         assert sideway_overlap >= 0. and sideway_overlap < 1.

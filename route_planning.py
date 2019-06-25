@@ -350,6 +350,17 @@ def plan_a_route_for_test():
     )
     return shoot_coors_geo, photo_ground_rectangles_geo, debug_info
 
+def get_longest_edge(area_points_gps_list):
+    longest_edge = None
+    longest_edge_length_m = -1
+    for i in range(len(area_points_gps_list)):
+        lon_1, lat_1 = area_points_gps_list[i-1]
+        lon_2, lat_2 = area_points_gps_list[i]
+        edge_length_m = get_meters_between_2_gps_points(lon_1, lat_1, lon_2, lat_2)
+        if edge_length_m > longest_edge_length_m:
+            longest_edge = [(lon_1, lat_1), (lon_2, lat_2)]
+            longest_edge_length_m = edge_length_m
+    return longest_edge
 
 class _UnitTest(unittest.TestCase):
     def test_coor_trans(self):
