@@ -245,7 +245,7 @@ def route_planning(shooting_area,
                 ]
                 photo_ground_rectangles.append(photo_ground_rectangle)
                 photo_ground_rectangles_geo.append(coor_trans       (photo_ground_rectangle, inv_trans_mat))
-        elif shoot_mode == 'sar':
+        elif shoot_mode == 'sar' or shoot_mode == 'video':
             start_point, end_point = (line_min_x, fly_y), (line_max_x, fly_y)
             if not fly_right:
                 start_point, end_point = end_point, start_point
@@ -255,7 +255,7 @@ def route_planning(shooting_area,
                 'longitude': start_point_geo[0],
                 'latitude': start_point_geo[1],
                 'fly_height_m': fly_height_m,
-                'control_code': 'sar_on',
+                'control_code': 'sar_on' if 'shoot_mode' == 'sar' else 'video_begin',
                 'infor': 'enter',
             })
             point_idx += 1
@@ -264,7 +264,7 @@ def route_planning(shooting_area,
                 'longitude': end_point_geo[0],
                 'latitude': end_point_geo[1],
                 'fly_height_m': fly_height_m,
-                'control_code': 'sar_off',
+                'control_code': 'sar_off' if 'shoot_mode' == 'sar' else 'video_end',
                 'infor': 'enter',
             })
             point_idx += 1
@@ -277,6 +277,8 @@ def route_planning(shooting_area,
             ]
             photo_ground_rectangles.append(photo_ground_rectangle)
             photo_ground_rectangles_geo.append(coor_trans   (photo_ground_rectangle, inv_trans_mat))
+        else:
+            raise 'unknown shoot_mode : %s' % str(shoot_mode)
 
         lines.append({
             'points': line_fly_points,

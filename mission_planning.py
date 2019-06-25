@@ -54,15 +54,21 @@ def mission_planning(
     try:
         sideway_overlap = float(sideway_overlap)
         assert sideway_overlap >= 0. and sideway_overlap < 1.
-        if 'sar' not in camera_attributes['type']:
+        if camera_attributes['type'] == 'camera':
             forward_overlap = float(forward_overlap)
             assert forward_overlap >= 0. and forward_overlap < 1.
+        else:
+            forward_overlap = None
     except Exception as e:
         logging.exception(e)
         return False, '重叠度必须是数字,且在[0,1)'
     # 确定路径规划的参数
     fly_height = None
-    shoot_mode = 'sar' if 'sar' in camera_attributes['type'] else 'shutter'
+    shoot_mode = {
+        'sar': 'sar',
+        'camera': 'shutter',
+        'video': 'video',
+    }[camera_attributes['type']]
     side_photo_ground_meters = None
     forward_shooting_space_meters = None
     forward_photo_ground_meters = None
@@ -117,10 +123,12 @@ def mission_planning(
             fly_height = max_fly_height_m
 
         # 计算地面相片大小与拍摄间隔
-        side_photo_ground_meters = camera_attributes['pixel_num_x'] * ground_resolution_m
         forward_photo_ground_meters = camera_attributes['pixel_num_y'] * ground_resolution_m
         forward_shooting_space_meters = forward_photo_ground_meters * (1 - forward_overlap)
-        side_shooting_space_meters = side_photo_ground_meters * (1 - sideway_overlap)
+        side_photo_ground_meters = side_shooting_space_meters = None
+        if camera_attributes['type'] == 'camera':
+            side_photo_ground_meters = camera_attributes['pixel_num_x'] * ground_resolution_m
+            side_shooting_space_meters = side_photo_ground_meters * (1 - sideway_overlap)
 
     # 航迹规划
     lines, photo_ground_rectangles_geo, debug_info = route_planning(
