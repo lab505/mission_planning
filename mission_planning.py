@@ -92,8 +92,8 @@ def mission_planning(
             fly_height = camera_suggest_fly_height
 
         # 地面相片大小
-        near_range_m = fly_height / math.cos(math.pi / 180. * (look_angle_degrees - range_beam_width_degrees / 2))
-        far_range_m = fly_height / math.cos(math.pi / 180. * (look_angle_degrees + range_beam_width_degrees / 2))
+        near_range_m = fly_height * math.tan(math.pi / 180. * (look_angle_degrees - range_beam_width_degrees / 2))
+        far_range_m = fly_height * math.tan(math.pi / 180. * (look_angle_degrees + range_beam_width_degrees / 2))
         side_photo_ground_meters = far_range_m - near_range_m
         side_shooting_space_meters = side_photo_ground_meters * (1 - sideway_overlap)
 
