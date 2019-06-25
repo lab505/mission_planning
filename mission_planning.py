@@ -55,7 +55,6 @@ def mission_planning(
     except Exception as e:
         logging.exception(e)
         return False, '重叠度必须是数字,且在[0,1)'
-    print('ok')
     # 确定路径规划的参数
     fly_height = None
     shoot_mode = 'sar' if 'sar' in camera_attributes['type'] else 'shutter'
