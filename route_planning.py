@@ -255,7 +255,7 @@ def route_planning(shooting_area,
                 'longitude': start_point_geo[0],
                 'latitude': start_point_geo[1],
                 'fly_height_m': fly_height_m,
-                'control_code': 'sar_on' if 'shoot_mode' == 'sar' else 'video_begin',
+                'control_code': 'sar_on' if 'shoot_mode' == 'sar' else None,
                 'infor': 'enter',
             })
             point_idx += 1
@@ -264,7 +264,7 @@ def route_planning(shooting_area,
                 'longitude': end_point_geo[0],
                 'latitude': end_point_geo[1],
                 'fly_height_m': fly_height_m,
-                'control_code': 'sar_off' if 'shoot_mode' == 'sar' else 'video_end',
+                'control_code': 'sar_off' if 'shoot_mode' == 'sar' else None,
                 'infor': 'enter',
             })
             point_idx += 1
