@@ -42,7 +42,7 @@ cameras = {
     },
 
     '轻型双波段相机(可见光)': {
-        'type': 'camera',
+        'type': 'video',
         'name': '轻型双波段相机(可见光)',
         'f_min_m':4.7*0.001,
         'f_max_m':47*0.001,
@@ -53,7 +53,7 @@ cameras = {
     },
 
     '轻型双波段相机(红外)': {
-        'type': 'camera',
+        'type': 'video',
         'name': '轻型双波段相机(红外)',
         'f_m': 35*0.001,
         'pixel_size_m': 17*0.001*0.001,
@@ -71,14 +71,21 @@ cameras = {
     },
 
      '光学相机（视频）': {
-        'type': 'camera',
+        'type': 'video',
         'name': '光学相机（视频）',
-        'f_min_m':28*0.001,
-        'f_max_m':100*0.001,
-        'f_m': 64*0.001,
-        'pixel_size_m': 8*0.001*0.001,
-        'pixel_num_x': 1920,
-        'pixel_num_y': 1080,
+        'f_m': 8*0.001,
+        'pixel_size_m': 3*0.001*0.001,
+        'pixel_num_x': 320,
+        'pixel_num_y': 240,
+    },
+    
+    '光学相机（照片）': {
+        'type': 'camera',
+        'name': '光学相机（照片）',
+        'f_m': 35*0.001,
+        'pixel_size_m': 2.41*0.001*0.001,
+        'pixel_num_x': 5472,
+        'pixel_num_y': 3648,
     },
 
 }
