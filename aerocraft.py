@@ -19,7 +19,7 @@ class Aerocraft():
 '''
 aerocrafts = {
     '猛牛-轻小型固定翼无人机(演示短航程)': {
-        'name': '轻小型固定翼无人机',
+        'name': '猛牛-轻小型固定翼无人机(演示短航程)',
         'max_v_km_h': 115.2,
         'suggest_v_km_h': 100.8,
         'min_v_km_h': 64.8,
@@ -28,7 +28,7 @@ aerocrafts = {
         'max_mileage_km': 20,
     },
     '猛牛-轻小型固定翼无人机': {
-        'name': '轻小型固定翼无人机',
+        'name': '猛牛-轻小型固定翼无人机',
         'max_v_km_h': 115.2,
         'suggest_v_km_h': 100.8,
         'min_v_km_h': 64.8,
@@ -37,7 +37,7 @@ aerocrafts = {
         'max_mileage_km': 150,
     },
     '海豚-轻小型固定翼无人机': {
-        'name': '轻小型固定翼无人机',
+        'name': '海豚-轻小型固定翼无人机',
         'max_v_km_h': 108,
         'suggest_v_km_h': 97.2,
         'min_v_km_h': 64.8,
@@ -46,7 +46,7 @@ aerocrafts = {
         'max_mileage_km': 97.2,
     },
     '滑翔机-轻小型固定翼无人机': {
-        'name': '轻小型固定翼无人机',
+        'name': '滑翔机-轻小型固定翼无人机',
         'max_v_km_h': 90,
         'suggest_v_km_h': 64.8,
         'min_v_km_h': 43.2,
