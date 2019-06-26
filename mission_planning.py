@@ -123,13 +123,13 @@ def mission_planning(
             fly_height = max_fly_height_m
 
         # 计算地面相片大小与拍摄间隔
-        forward_photo_ground_meters = camera_attributes['pixel_num_y'] * ground_resolution_m
-        forward_shooting_space_meters = forward_photo_ground_meters * (1 - forward_overlap)
-        side_photo_ground_meters = side_shooting_space_meters = None
+        side_photo_ground_meters = camera_attributes['pixel_num_x'] * ground_resolution_m
+        side_shooting_space_meters = side_photo_ground_meters * (1 - sideway_overlap)
+        forward_photo_ground_meters = forward_shooting_space_meters = None
         if camera_attributes['type'] == 'camera':
-            side_photo_ground_meters = camera_attributes['pixel_num_x'] * ground_resolution_m
-            side_shooting_space_meters = side_photo_ground_meters * (1 - sideway_overlap)
-
+            forward_photo_ground_meters = camera_attributes['pixel_num_y'] * ground_resolution_m
+            forward_shooting_space_meters = forward_photo_ground_meters * (1 - forward_overlap)
+            
     # 航迹规划
     lines, photo_ground_rectangles_geo, debug_info = route_planning(
         shooting_area=area_points_list,
