@@ -149,9 +149,8 @@ def route_planning(shooting_area,
     min_x, min_y, max_x, max_y = get_bounding_box(shooting_area_transed)
     area_gdal_polygon = points_to_gdal_polygon(shooting_area_transed)
     photo_size_ground_meters_half_y = side_photo_ground_meters/2.
-    if shoot_mode != 'sar':
+    if shoot_mode != 'sar' and shoot_mode != 'video':
         photo_size_ground_meters_half_x = forward_photo_ground_meters/2.
-    
     # 获取buffer
     board_area = area_gdal_polygon.Buffer(distance=board_area_buffer_m)
     board_area_geometry = board_area.GetGeometryRef(0)
@@ -184,7 +183,7 @@ def route_planning(shooting_area,
     lines = []
     for line_y in lines_y:
         # 计算条带宽度
-        line_min_y, line_max_y = line_y - side_shooting_space_meters/2., line_y     + side_shooting_space_meters/2.
+        line_min_y, line_max_y = line_y - side_shooting_space_meters/2., line_y + side_shooting_space_meters/2.
 
         # 计算条带多边形(line_polygon)及其外包矩形(line_polygon_envelope)
         line_rectangle = [
