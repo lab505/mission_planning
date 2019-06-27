@@ -76,7 +76,7 @@ def mission_planning(
 
     max_fly_height_m = aerocraft_attributes['max_height_m']
     min_fly_height_m = aerocraft_attributes['min_height_m']
-    if board_region_max_fly_height_m > max_fly_height_m:
+    if board_region_max_fly_height_m and board_region_max_fly_height_m > max_fly_height_m:
         max_fly_height_m = board_region_max_fly_height_m
 
     calculate_fly_height = None
