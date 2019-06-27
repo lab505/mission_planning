@@ -192,6 +192,7 @@ def mission_planning(
             # 重要信息
             'mission_num': i + 1,
             'mission_name': mission_name,
+            'mission_aerocraft_id': hash('%s_%d' % (mission_name, i)) % 32767,
             'shoot_mode': 'shutter',
             'route_coors': fly_route,  # 航点
             'length_m': length_m,  # 距离
