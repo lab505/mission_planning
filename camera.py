@@ -8,7 +8,7 @@ cameras = {
         'R_max_m': 6000.,
         'R_suggest_m': 1000.,
         'ground_resolution_m': .1,
-        'right_look_angle_degrees': 60.,
+        'right_look_angle_degrees': 70.,
         'range_beam_width_degrees': 6.,
     },
 
