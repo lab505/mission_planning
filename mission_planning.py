@@ -6,6 +6,8 @@ sys.path.append(filepath)
 from camera import cameras
 from aerocraft import aerocrafts
 from route_planning import route_planning, get_longest_edge
+import uuid
+
 
 
 def mission_planning(
@@ -191,6 +193,7 @@ def mission_planning(
         res.append({
             # 重要信息
             'mission_num': i + 1,
+            'mission_id':str(uuid.uuid1()),
             'mission_name': mission_name,
             'mission_aerocraft_id': hash('%s_%d' % (mission_name, i)) % 32767,
             'shoot_mode': 'shutter',
