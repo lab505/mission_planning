@@ -264,7 +264,7 @@ def route_planning(shooting_area,
                 'latitude': end_point_geo[1],
                 'fly_height_m': fly_height_m,
                 'control_code': 'sar_off' if 'shoot_mode' == 'sar' else None,
-                'infor': 'enter',
+                'infor': 'leave',
             })
             point_idx += 1
 
