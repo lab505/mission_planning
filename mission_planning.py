@@ -83,6 +83,7 @@ def mission_planning(
 
     calculate_fly_height = None
     actually_ground_resolution_m = None
+    look_angle_degrees=None
     if 'sar' in camera_attributes['type']:
         # 计算飞行高度
         look_angle_degrees = camera_attributes['right_look_angle_degrees']
@@ -121,7 +122,7 @@ def mission_planning(
         calculate_fly_height = camera_max_fly_height = camera_attributes['f_m'] / camera_attributes['pixel_size_m'] * ground_resolution_m
         fly_height = camera_max_fly_height
         if camera_max_fly_height < min_fly_height_m:
-            return False, '分辨率允许的最大飞行高度%f(m) 不足 飞机的最小飞行高度%f(m)，请调整' % (camera_max_fly_height, min_fly_height_m)
+            return False, '分辨率允许的最大飞行高度%f(m) 不足飞机的最小飞行高度%f(m)，请调整' % (camera_max_fly_height, min_fly_height_m)
         if camera_max_fly_height < max_fly_height_m:
             fly_height = camera_max_fly_height
         else:
@@ -129,11 +130,11 @@ def mission_planning(
         actually_ground_resolution_m = camera_attributes['pixel_size_m'] / camera_attributes['f_m'] * fly_height
 
         # 计算地面相片大小与拍摄间隔
-        side_photo_ground_meters = camera_attributes['pixel_num_x'] * ground_resolution_m
+        side_photo_ground_meters = camera_attributes['pixel_num_x'] * actually_ground_resolution_m
         side_shooting_space_meters = side_photo_ground_meters * (1 - sideway_overlap)
         forward_photo_ground_meters = forward_shooting_space_meters = None
         if camera_attributes['type'] == 'camera':
-            forward_photo_ground_meters = camera_attributes['pixel_num_y'] * ground_resolution_m
+            forward_photo_ground_meters = camera_attributes['pixel_num_y'] * actually_ground_resolution_m
             forward_shooting_space_meters = forward_photo_ground_meters * (1 - forward_overlap)
             
     # 航迹规划
@@ -206,6 +207,7 @@ def mission_planning(
             'line_num': line_num,  # 航线数量
             'calculate_fly_height': calculate_fly_height,  # 根据相机要求计算出的航高
             'actually_ground_resolution_m': actually_ground_resolution_m,  # 实际拍出的地面分辨率
+            'look_angle_degrees':look_angle_degrees,
             # 'fly_direction': fly_direction_degree,
 
             # 其它信息
