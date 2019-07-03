@@ -13,6 +13,7 @@ def get_meters_between_2_gps_points(lon_1, lat_1, lon_2, lat_2):
     return Geodesic.WGS84.Inverse(lat_1, lon_1, lat_2, lon_2)['s12']
 
 
+
 def get_meters_between_2points(x_1, y_1, x_2, y_2, epsgcode):
     if epsgcode is '4326':
         return get_meters_between_2_gps_points(x_1, y_1, x_2, y_2)
@@ -162,9 +163,17 @@ def route_planning(shooting_area,
     board_area_res = get_structured_board_region(board_area_points_geo)
 
     # 确定航线数量与位置(lines_num lines_y)
+    #由左向右飞行，中心在观测区域外接矩形的中心位置
     area_height = max_y-min_y
     lines_num = math.ceil(area_height/side_shooting_space_meters)+1
     lines_y = [side_shooting_space_meters * (i-(lines_num-1)/2.) for i in range(lines_num)]
+    if shoot_mode == 'sar':
+        lines_num = math.ceil(area_height/side_shooting_space_meters/2.)+1
+        if (lines_num % 2) == 0:
+            lines_num = lines_num + 1
+        else:
+            lines_num = lines_num
+        lines_y = [side_shooting_space_meters/2. * (i-(lines_num-1)/2.) for i in range(lines_num)]
     #aerocraft_lines_id = [[] for i_aerocraft in range(aerocraft_num)]
     #ave_lines = lines_num // aerocraft_num
     #_i_line = 0
@@ -196,16 +205,16 @@ def route_planning(shooting_area,
             continue
         line_polygon_envelope = line_polygon.GetEnvelope()
 
-        line_min_x, line_max_x = line_polygon_envelope[0], line_polygon_envelope    [1]
+        line_min_x, line_max_x = line_polygon_envelope[0], line_polygon_envelope [1]
         line_length = line_max_x-line_min_x
         line_center_x = (line_min_x+line_max_x)/2.
 
         # 航线偏移(Sar)
         fly_y = None
-        if fly_right:
-            fly_y = line_y + fly_position_left_offset_meters
-        else:
-            fly_y = line_y - fly_position_left_offset_meters
+        #if fly_right:
+        fly_y = line_y + fly_position_left_offset_meters
+        #else:
+            #fly_y = line_y - fly_position_left_offset_meters
 
         line_fly_points = []
         point_idx = 0
