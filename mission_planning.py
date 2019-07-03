@@ -115,6 +115,7 @@ def mission_planning(
         side_shooting_space_meters = side_photo_ground_meters * (1 - sideway_overlap)
 
         fly_position_left_offset_meters = (far_range_m + near_range_m) / 2.
+        #fly_position_left_offset_meters = near_range_m + side_shooting_space_meters
         if camera_attributes['right_look_angle_degrees'] < 0:  # 如果Sar向左看
             fly_position_left_offset_meters = -fly_position_left_offset_meters
     else:
