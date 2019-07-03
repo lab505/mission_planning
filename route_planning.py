@@ -168,7 +168,7 @@ def route_planning(shooting_area,
     lines_num = math.ceil(area_height/side_shooting_space_meters)+1
     lines_y = [side_shooting_space_meters * (i-(lines_num-1)/2.) for i in range(lines_num)]
     if shoot_mode == 'sar':
-        lines_num = math.ceil(area_height/side_shooting_space_meters/2.)+1
+        lines_num = math.ceil(area_height/side_shooting_space_meters*2.)+1
         if (lines_num % 2) == 0:
             lines_num = lines_num + 1
         else:
