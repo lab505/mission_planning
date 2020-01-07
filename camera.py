@@ -13,16 +13,16 @@ cameras = {
         'range_beam_width_degrees': 13.,#波束宽度
     },
 
-    #'广域SAR': {
-       # 'type': 'sar',
-        #'name': '广域SAR',
-       # 'R_min_m': 3000.,
-       # 'R_max_m': 4000.,
-        #'R_suggest_m': 4000.,
-        #'ground_resolution_m': .1,
-        #'right_look_angle_degrees': 45.,
-       # 'range_beam_width_degrees': 6.,
-    #},
+    '广域SAR': {
+        'type': 'sar',
+        'name': '广域SAR',
+        'R_min_m': 30000.,
+        'R_max_m': 40000.,
+        'R_suggest_m': 30000.,
+        'ground_resolution_m': .2,
+        'right_look_angle_degrees': 80.,
+        'range_beam_width_degrees': 5.,
+    },
 
     '大视场立体测绘相机': {
         'type': 'camera',
