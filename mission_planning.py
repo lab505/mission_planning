@@ -194,6 +194,7 @@ def mission_planning(
         line_num = aerocraft_lines[i]['plane_line_num']
         res.append({
             # 重要信息
+            'plane_number':need_aerocraft_num,
             'mission_num': i + 1,
             'mission_id':str(uuid.uuid1()),
             'mission_name': mission_name,
