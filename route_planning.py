@@ -13,7 +13,6 @@ def get_meters_between_2_gps_points(lon_1, lat_1, lon_2, lat_2):
     return Geodesic.WGS84.Inverse(lat_1, lon_1, lat_2, lon_2)['s12']
 
 
-
 def get_meters_between_2points(x_1, y_1, x_2, y_2, epsgcode):
     if epsgcode is '4326':
         return get_meters_between_2_gps_points(x_1, y_1, x_2, y_2)
@@ -150,8 +149,9 @@ def route_planning(shooting_area,
     min_x, min_y, max_x, max_y = get_bounding_box(shooting_area_transed)
     area_gdal_polygon = points_to_gdal_polygon(shooting_area_transed)
     photo_size_ground_meters_half_y = side_photo_ground_meters/2.
-    if shoot_mode != 'sar' and shoot_mode != 'video':
+    if shoot_mode != 'sar':
         photo_size_ground_meters_half_x = forward_photo_ground_meters/2.
+    
     # 获取buffer
     board_area = area_gdal_polygon.Buffer(distance=board_area_buffer_m)
     board_area_geometry = board_area.GetGeometryRef(0)
@@ -163,7 +163,6 @@ def route_planning(shooting_area,
     board_area_res = get_structured_board_region(board_area_points_geo)
 
     # 确定航线数量与位置(lines_num lines_y)
-    #由左向右飞行，中心在观测区域外接矩形的中心位置
     area_height = max_y-min_y
     lines_num = math.ceil(area_height/side_shooting_space_meters)+1
     lines_y = [side_shooting_space_meters * (i-(lines_num-1)/2.) for i in range(lines_num)]
@@ -192,7 +191,7 @@ def route_planning(shooting_area,
     lines = []
     for line_y in lines_y:
         # 计算条带宽度
-        line_min_y, line_max_y = line_y - side_shooting_space_meters/2., line_y + side_shooting_space_meters/2.
+        line_min_y, line_max_y = line_y - side_shooting_space_meters/2., line_y     + side_shooting_space_meters/2.
 
         # 计算条带多边形(line_polygon)及其外包矩形(line_polygon_envelope)
         line_rectangle = [
@@ -205,7 +204,7 @@ def route_planning(shooting_area,
             continue
         line_polygon_envelope = line_polygon.GetEnvelope()
 
-        line_min_x, line_max_x = line_polygon_envelope[0], line_polygon_envelope [1]
+        line_min_x, line_max_x = line_polygon_envelope[0], line_polygon_envelope    [1]
         line_length = line_max_x-line_min_x
         line_center_x = (line_min_x+line_max_x)/2.
 
@@ -214,7 +213,7 @@ def route_planning(shooting_area,
         #if fly_right:
         fly_y = line_y + fly_position_left_offset_meters
         #else:
-            #fly_y = line_y - fly_position_left_offset_meters
+           # fly_y = line_y - fly_position_left_offset_meters
 
         line_fly_points = []
         point_idx = 0
@@ -273,7 +272,7 @@ def route_planning(shooting_area,
                 'latitude': end_point_geo[1],
                 'fly_height_m': fly_height_m,
                 'control_code': 'sar_off' if 'shoot_mode' == 'sar' else None,
-                'infor': 'leave',
+                'infor': 'enter',
             })
             point_idx += 1
 
@@ -360,17 +359,6 @@ def plan_a_route_for_test():
     )
     return shoot_coors_geo, photo_ground_rectangles_geo, debug_info
 
-def get_longest_edge(area_points_gps_list):
-    longest_edge = None
-    longest_edge_length_m = -1
-    for i in range(len(area_points_gps_list)):
-        lon_1, lat_1 = area_points_gps_list[i-1]
-        lon_2, lat_2 = area_points_gps_list[i]
-        edge_length_m = get_meters_between_2_gps_points(lon_1, lat_1, lon_2, lat_2)
-        if edge_length_m > longest_edge_length_m:
-            longest_edge = [(lon_1, lat_1), (lon_2, lat_2)]
-            longest_edge_length_m = edge_length_m
-    return longest_edge
 
 class _UnitTest(unittest.TestCase):
     def test_coor_trans(self):

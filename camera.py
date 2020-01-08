@@ -2,15 +2,14 @@
 
 cameras = {
     'minisar': {
-        'type': 'sar',#载荷类型
-        'name': 'minisar',#载荷名字
-        'R_min_m': 800.,#最短波长
-        'R_max_m': 6000.,#最长波长
-        'R_suggest_m': 800.,#建议波长
-        'f_m': -1.,#焦距
-        'ground_resolution_m': .1,#地面分辨率
-        'right_look_angle_degrees': -66.,#安装角度
-        'range_beam_width_degrees': 13.,#波束宽度
+        'type': 'sar',
+        'name': 'minisar',
+        'R_min_m': 800,
+        'R_max_m': 6000.,
+        'R_suggest_m': 3863.,
+        'ground_resolution_m': .1,
+        'right_look_angle_degrees': -75.,
+        'range_beam_width_degrees': 13.,
     },
 
     '广域SAR': {
@@ -21,7 +20,7 @@ cameras = {
         'R_suggest_m': 30000.,
         'ground_resolution_m': .2,
         'right_look_angle_degrees': 80.,
-        'range_beam_width_degrees': 5.,
+       'range_beam_width_degrees': 5.,
     },
 
     '大视场立体测绘相机': {
@@ -31,15 +30,6 @@ cameras = {
         'pixel_size_m': 3.76*0.001*0.001,
         'pixel_num_x': 11664,
         'pixel_num_y': 8750,
-    },
-
-    '地理所单电数码相机': {
-        'type': 'camera',
-        'name': '地理所单电数码相机',
-        'f_m': 35*0.001,
-        'pixel_size_m': 6*0.001*0.001,
-        'pixel_num_x': 7952,
-        'pixel_num_y': 5304,
     },
 
     '高光谱相机': {
@@ -56,7 +46,7 @@ cameras = {
         'name': '轻型双波段相机(可见光)',
         'f_min_m':4.7*0.001,
         'f_max_m':47*0.001,
-        'f_m': 20*0.001,
+        'f_m': 9.4*0.001,
         'pixel_size_m': 2.8*0.001*0.001,
         'pixel_num_x': 1920,
         'pixel_num_y': 1080,  
@@ -92,10 +82,17 @@ cameras = {
     '光学相机（照片）': {
         'type': 'camera',
         'name': '光学相机（照片）',
-        'f_m': 35*0.001,
+        'f_m': 10*0.001,
         'pixel_size_m': 2.41*0.001*0.001,
         'pixel_num_x': 5472,
         'pixel_num_y': 3648,
     },
-
+    '地理所单电数码相机': {
+        'type': 'camera',
+        'name': '地理所单电数码相机',
+        'f_m': 35*0.001,
+        'pixel_size_m': 4.5*0.001*0.001,
+        'pixel_num_x': 7952,
+        'pixel_num_y': 5304,
+    },
 }

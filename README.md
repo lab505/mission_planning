@@ -14,5 +14,5 @@ python main.py print_test_data
 
 # 运行
 ```
-python main.py '{\"area_points_list\":[[30,30],[30,30.01],[30.01,30.01],[30.01,30]],\"mission_name\":\"mission1\",\"aerocraft\":\"\u731b\u725b-\u8f7b\u5c0f\u578b\u56fa\u5b9a\u7ffc\u65e0\u4eba\u673a\",\"camera\":\"\u5927\u89c6\u573a\u7acb\u4f53\u6d4b\u7ed8\u76f8\u673a\",\"ground_resolution_m\":0.05,\"forward_overlap\":0.4,\"sideway_overlap\":0.6,\"fly_direction_degree\":0,\"application\":\"flood\",\"aerocraft_num\":3,\"board_region\":null,\"board_region_max_fly_height_m\":1000}'
+python main.py '{\"area_points_list\":[[30,30],[30,30.01],[30.01,30.01],[30.01,30]],\"mission_name\":\"mission1\",\"aerocraft\":\"\u731b\u725b-\u8f7b\u5c0f\u578b\u56fa\u5b9a\u7ffc\u65e0\u4eba\u673a(\u6f14\u793a\u77ed\u822a\u7a0b)\",\"camera\":\"\u5927\u89c6\u573a\u7acb\u4f53\u6d4b\u7ed8\u76f8\u673a\",\"ground_resolution_m\":0.05,\"forward_overlap\":0.4,\"sideway_overlap\":0.6,\"fly_direction_degree\":0,\"application\":\"flood\",\"board_region\":null,\"board_region_max_fly_height_m\":1000,\"right_look_angle_degrees\":75,\"R_suggest_m\":3000,\"f_m\":0.035,\"bend_radius\":200}'
 ```
