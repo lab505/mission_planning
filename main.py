@@ -38,7 +38,9 @@ def plan(input_):
         print(res)
 
 def print_test_data():
-    print (json.dumps(testdata).replace(' ', ''))
+    a = (json.dumps(testdata).replace(' ', ''))
+    a = ('\\\"').join(a.split('\"'))
+    print(a)
 
 def test():
     plan(testdata)
